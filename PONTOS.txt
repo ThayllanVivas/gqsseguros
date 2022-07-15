@@ -1,0 +1,20 @@
+- [FEITO] Quando usúario concluir tarefa, mostrar opção de se foi com sucesso ou não
+	[não adicionado]-> Adicionar campos para que inclua seguradora escolhida, valor do seguro e outros dados importantes
+- [FEITO] Quando usuário escolher uma modalidade diferente (seguro novo, recuperação, endosso, etc) mudar o nome do botão CRIAR para ser
+compativel com a modalidade escolhida
+- [FEITO] Enquanto usuário não preencher todos os campos necessários, fazer com que o botão CRIAR fique em verde apagado (disabled)
+- [FEITO] IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
+- [FEITO] Alterar código para que os comentários da tarefa sejam retornados e não os comentários do usuário
+- Adicionar rodapé com informações de quem é o usuário, qual perfil é o dele, etc
+
+
+--- ADMIN_MODE ---
+Quando se é admin, é necessário que fique visível TODOS os dados de quais atividades foram realizadas, vendidas, não vendidas, 
+concluídas, por quem, quando.
+
+Passo a passo:
+[FEITO] 1 - Criar modo admin no banco de dados
+[FEITO] 2 - implementar código que verifique se o usuário é admin
+	2.1 - necessário pegar o ID do usuário para, com código, verificar no banco de dados o modo do usuário
+[FEITO] 3 - se for admin, banco de dados retorno todos os dados disponíveis até então para o dashboard do admin
+	3.1 - IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin

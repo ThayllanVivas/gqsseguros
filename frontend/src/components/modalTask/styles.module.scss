@@ -1,0 +1,161 @@
+.container {
+    color: var(--white);
+    min-width: 400px;
+    max-width: 400px;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .containerItem {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+
+        hr {
+            margin: 1rem 0;
+        }
+
+        span {
+            color: var(--green-900);
+        }
+
+        #taskInfo{
+            margin-bottom: 1rem;
+
+            .sonOfTaskInfo{
+                display: flex;
+                align-items: center;
+                min-height: 25px;
+
+                .propertyInfo {
+                    min-width: 40%;
+                    padding: 0;
+                }
+                .desriptionInfo {
+                    // max-width: 55%;
+                    padding: 0;
+                }
+            }
+        }
+
+        #taskCommentsContainer {
+
+            h4 {
+                display: flex;
+                justify-content: center;
+                color: var(--white);
+                background-color: var(--dark-900);
+                padding: 0.5rem;
+            }
+
+            div {
+                display: flex;
+                // align-items: center;
+                
+
+                p.commentsContainer {
+                    min-width: 95%;
+                    // background-color: antiquewhite;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    span {
+                        margin-right: 0.3rem;
+                    }
+                }
+                button.deleteCommentButton {
+                    display: flex;
+                    color: var(--red-900);
+                    justify-content: center;
+                    background: transparent;
+                    border: 0;
+                    min-width: 5%;
+                    padding-top: 0.7rem;
+                }
+            }
+        }
+
+        .commentsContainer {
+            padding: 0.8rem 0 0 0;
+        }
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        
+        #finishTask {
+            min-width: 49%;
+            background-color: rgba(#3FFFA3, 0.9);
+            color: var(--dark-900);
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(#3FFFA3, 0.5);
+            border-radius: 0.3rem;
+        }
+
+        #finishedTask{
+            min-width: 49%;
+            background-color: rgba(#FF3F4B, 0.9);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(#FF3F4B, 0.5);
+            border-radius: 0.3rem;
+        }
+
+        #addComment {
+            min-width: 49%;
+            background-color: rgba(#101026, 0.9);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(#000, 0.5);
+            border-radius: 0.3rem;
+        }
+
+        #addCommentGhost{
+            min-width: 49%;
+            background-color: rgba(#101026, 0);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(#000, 0);
+            border-radius: 0.3rem;
+        }
+    }
+
+    #formSection {
+        min-width: 100%;
+        margin: 1rem 0;
+
+        .textarea {
+            background-color: var(--dark-900);
+            color: var(--white);
+            min-width: 400px;
+            min-height: 120px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.3rem;
+            border-radius: 0.3rem;
+
+            &::placeholder {
+                color: var(--red-900);
+                opacity: 0.4;
+                // font-weight: bold;
+            }
+        }
+    }
+}
+
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 2000ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
+}
