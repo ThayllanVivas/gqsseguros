@@ -42,9 +42,7 @@ export default function SignUp() {
   return (
     <>
       <Head>
-        <div className={styles.container}>
-          <title>Projeto Pizza - Faça seu cadastro</title>
-        </div>
+        <title>GQS Seguros - Novo Usuário</title>
       </Head>
 
       <Header activePage='signUpPage'/>

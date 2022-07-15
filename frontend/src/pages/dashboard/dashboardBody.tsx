@@ -118,23 +118,23 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
 
     // -> function to OPEN / CLOSE modal
     async function func_toogleOpenCloseModalView(TASK_ID?: string){
-        await func_updateButton()
+        // await func_updateButton()
         await func_updateModalData(TASK_ID)
         set_moda_view(!modal_view)
     }
 
     // -> function to ADD a coment on database
-    async function handleAddComment(description: string){
+    async function func_handleAddComment(comment: string){
 
         //verify is the user really types anything
-        if(description.length == 0){
+        if(comment.length == 0){
           toast.error("Insira algum comentário antes")
           return
         }
     
         //insert the new comment inside database
         await api.post('/comment', {
-          text: description,
+          text: comment,
           task_id: modal_task_ID
         })
     
@@ -145,7 +145,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     }
 
     // -> function to DELETE a coment on database
-    async function handleDeleteComment(comment_id: string){    
+    async function func_handleDeleteComment(comment_id: string){    
         await api.delete("/comment", {
             data: {
                 id: comment_id
@@ -217,8 +217,8 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
                             customersList={customers}
                             onRequestClose={func_toogleOpenCloseModalView}
                             onRequestFinishUnfinish={func_toogleFinishUnfinishTask}
-                            onRequestAddComent={handleAddComment}
-                            onRequestDeleteComment={handleDeleteComment}
+                            onRequestAddComent={func_handleAddComment}
+                            onRequestDeleteComment={func_handleDeleteComment}
                         />
                     )}
                 </div>

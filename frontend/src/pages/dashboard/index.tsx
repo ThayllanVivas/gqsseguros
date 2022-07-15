@@ -5,7 +5,6 @@ import { Body } from './dashboardBody'
 import { Header } from "../../components/header"
 import { canSSRAuth } from "../../utils/canSSRAuth"
 import { setupAPIClient } from "../../services/api"
-import { Footer } from '../../components/footer'
 
 // -- START OF INTERFACES AND TYPES -- //
 interface DashboardProps {
@@ -93,7 +92,7 @@ export default function Dashboard({taskList, customerList, categoryList}: Dashbo
     return (
         <>
             <Head>
-                <title>Projeto Pizza - Dashboard</title>
+                <title>GQS Seguros</title>
             </Head>
 
             <Header activePage='dashboardPage' />

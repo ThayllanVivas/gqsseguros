@@ -22,7 +22,8 @@ export function ModalTask({isOpen, task, comments, customersList, onRequestClose
 
   const [description, setDescription] = useState('')
   const [modal_task, set_modal_task] = useState(task)
-  const customer = customersList.find(customer => customer.id == task.customer_id)
+  console.log('->' + task)
+  const customer = customersList.find(customer => customer?.id == task?.customer_id)
 
   const customStyles = {
     overlay: {
@@ -81,7 +82,7 @@ export function ModalTask({isOpen, task, comments, customersList, onRequestClose
               </div>
 
               <div className={Styles.descriptionInfo}>
-                <span>{customer.name.toLocaleUpperCase()}</span>
+                <span>{customer?.name.toLocaleUpperCase()}</span>
               </div>
             </div>
 

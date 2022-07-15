@@ -7,6 +7,7 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import { useState, FormEvent, useEffect } from 'react'
 import { Footer } from "../../components/footer";
+import Router from "next/router";
 
 // -- START OF INTERFACES AND TYPES -- //
 interface ListKind {
@@ -128,13 +129,15 @@ export default function product({categoryList, branchList, customerList}: ListKi
         setVehiclePrice("")
         setBranchSelected('')
         setCategorySelected('')
+
+        Router.push('/dashboard')
     }
 
     // --- RETURN --- //
     return (
         <>
             <Head>
-                <title>Nova categoria - Sujeito Pizza</title>
+                <title>GQS Seguros - Nova Tarefa</title>
             </Head>
             <Header activePage='newTaskPage' />
 

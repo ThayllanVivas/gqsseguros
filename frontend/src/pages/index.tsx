@@ -44,8 +44,9 @@ export default function Home() {
   return (
     <>
       <Head>
-          <title>Projeto Pizza - Faça seu login</title>
+          <title>GQS Seguros - Faça seu login</title>
       </Head>
+      
       <div className={styles.TheFather}>
         <div className={styles.containerCenter}>
           <div id={styles.LogoTranstion}></div>

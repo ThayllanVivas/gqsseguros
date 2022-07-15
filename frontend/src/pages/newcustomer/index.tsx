@@ -59,7 +59,7 @@ export default function customer() {
     return (
         <>
             <Head>
-                <title>Nova categoria - Sujeito Pizza</title>
+                <title>GQS Seguros - Novo Cliente</title>
             </Head>
             <Header activePage='customerPage'/>
 
