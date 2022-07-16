@@ -1,17 +1,18 @@
 // -- IMPORTs AREA -- //
-import { toast } from 'react-toastify'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { ModalComponent } from '../../components/modal'
-import { FiRefreshCcw } from "react-icons/fi"
-import { setupAPIClient } from '../../services/api'
-import { CustomerTypes, CategoryTypes, TaskDateType } from './index'
 import Styles from './dashboard.module.scss'
 import DashboardTaskBody from './dashboardTaskBody'
-import { AuthContext, ModalTaskType } from '../../contexts/AuthContext'
+
+import { toast } from 'react-toastify'
+import { FiRefreshCcw } from "react-icons/fi"
+import { setupAPIClient } from '../../services/api'
+import { ModalComponent } from '../../components/modal'
+import { useEffect, useState } from 'react'
+import { CommentTaskType, TaskType } from '../../contexts/AuthContext'
+import { CustomerTypes, CategoryTypes, TaskDateType } from './index'
 
 // -- INTERFACE and TYPEs AREA -- //
 interface DASHBOARDPROPS {
-    taskList: ModalTaskType[],
+    taskList: TaskType[],
     customerList: CustomerTypes[],
     categoryList: CategoryTypes[],
     taskDates: TaskDateType[]
@@ -25,15 +26,12 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     const [tasksStatusFalseQuantity, set_tasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
     const [customers, set_customers] = useState(customerList) //KEEP IT ON THIS COMPONENT
 
-    const {modalTask, setModalTask} = useContext(AuthContext)
-    const {modalTaskID, setModalTaskID} = useContext(AuthContext)
-    const {modalComments, setModalComments} = useContext(AuthContext)
-    const {modalViewStatus, setModalViewStatus} = useContext(AuthContext)
-    const {func_updateModalData, func_toogleOpenCloseModalView} = useContext(AuthContext)
+    const [modalTask, setModalTask] = useState<TaskType>()
+    const [modalTaskID, setModalTaskID] = useState('')
+    const [modalComments, setModalComments] = useState([])
+    const [modalViewStatus, setModalViewStatus] = useState<boolean>(false)
 
     const api = setupAPIClient()
-
-    
 
     // effect to change status of the tasks
     useEffect(() => {
@@ -73,7 +71,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     }
 
     // -> function to INSERT data inside of the modal variable
-    async function func_toUpdateUserCommments(){
+    async function func_toUpdateCommments(){
         const response = await api.get("/comment")
         return response.data
     }
@@ -83,7 +81,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         toast.success('Dashboard atualizado')
         await func_toUpdateTasks()
         await func_toUpdateCustomers()
-        await func_toUpdateUserCommments()
+        await func_toUpdateCommments()
     }
 
     // -> function to FINISH or UNFINISH a task
@@ -135,6 +133,35 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         toast.success("Comentário removido com sucesso")
 
         await func_updateModalData(modalTaskID) //call function to update modal data
+    }
+
+    // -> function to UPDATE data for modal
+    async function func_updateModalData(TASK_ID: string){
+
+        const commentsUpdatedResponse: CommentTaskType[] = await func_toUpdateCommments() // to update the user comments
+        const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
+        let commentsFilteredForModal = [] //to aux
+
+        // commentsUpdatedResponse.map((comment: CommentTaskType) => {
+        //     if(comment.task_id === TASK_ID) {
+        //         commentsFilteredForModal.push(comment)
+        //     }
+        // })
+        commentsUpdatedResponse.find((comment: CommentTaskType) => {
+            if(comment.task_id === TASK_ID) {
+                commentsFilteredForModal.push(comment)
+            }
+        })
+
+        setModalTask(taskFilteredForModal) //set modal task
+        setModalTaskID(TASK_ID) //set ID of modal task
+        setModalComments(commentsFilteredForModal) //set modal comments
+    }
+
+    // -> function to OPEN or CLOSE modal
+    async function func_toogleOpenCloseModalView(TASK_ID?: string){
+        await func_updateModalData(TASK_ID)
+        setModalViewStatus(!modalViewStatus) // set modal view status
     }
 
     return (

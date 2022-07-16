@@ -6,7 +6,7 @@ interface TaskProps {
     date: string,
     tasks: ModalTaskType[],
     customers: CustomerTypes[],
-    handleOpenModalView: (task_id: string) => void,
+    handleOpenModalView: (task_id?: string) => void,
     categoryList: CategoryTypes[]
 }
 

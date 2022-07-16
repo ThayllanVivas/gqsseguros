@@ -7,7 +7,8 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import { useState, FormEvent, useEffect, useContext } from 'react';
 import Router from "next/router";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext, TaskType } from "../../contexts/AuthContext";
+import { ModalComponent } from "../../components/modal";
 
 // -- START OF INTERFACES AND TYPES -- //
 interface ListKind {
@@ -45,7 +46,7 @@ export default function product({categoryList, branchList, customerList}: ListKi
 
     const [branches, setBranches] = useState(branchList)
     const [categories, setCategories] = useState(categoryList)
-    const [constumers, setConstumers] = useState(customerList)
+    const [customers, setCustomers] = useState(customerList)
 
     const [description, setDescription] = useState('')
 
@@ -60,7 +61,12 @@ export default function product({categoryList, branchList, customerList}: ListKi
     const [categoryCREATEButton, setCategoryCREATEButton] = useState('')
     const [styleCREATEButton, setStyleCREATEButton] = useState(false)
 
-    const {func_toogleOpenCloseModalView} = useContext(AuthContext)
+    const [modalTask, setModalTask] = useState<TaskType>()
+    const [modalTaskID, setModalTaskID] = useState('')
+    const [modalComments, setModalComments] = useState([])
+    const [modalViewStatus, setModalViewStatus] = useState<boolean>(false)
+
+    const {func_toogleOpenCloseModalView, func_toogleFinishUnfinishTask, func_handleAddComment, func_handleDeleteComment} = useContext(AuthContext)
 
     const api = setupAPIClient()
 
@@ -191,7 +197,7 @@ export default function product({categoryList, branchList, customerList}: ListKi
                         <option key="default" value="--Selecione um cliente--">
                         -- Selecione um cliente --
                         </option>
-                        {constumers.map( (constumer, index) => { 
+                        {customers.map( (constumer, index) => { 
                             return (
                                 <option key={constumer.id} value={constumer.id}>
                                     {constumer.name}
@@ -247,6 +253,21 @@ export default function product({categoryList, branchList, customerList}: ListKi
 
                 </form>
             </main>
+
+            <div>
+                    {modalViewStatus && (
+                        <ModalComponent 
+                            isOpen={modalViewStatus}
+                            task={modalTask}
+                            comments={modalComments}
+                            customersList={customers}
+                            onRequestClose={func_toogleOpenCloseModalView}
+                            onRequestFinishUnfinish={func_toogleFinishUnfinishTask}
+                            onRequestAddComent={func_handleAddComment}
+                            onRequestDeleteComment={func_handleDeleteComment}
+                        />
+                    )}
+                </div>
         </>
     )
 }

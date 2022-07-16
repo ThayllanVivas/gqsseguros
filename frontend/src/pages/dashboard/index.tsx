@@ -5,11 +5,11 @@ import { Body } from './dashboardBody'
 import { Header } from "../../components/header"
 import { canSSRAuth } from "../../utils/canSSRAuth"
 import { setupAPIClient } from "../../services/api"
-import { ModalTaskType } from '../../contexts/AuthContext'
+import { TaskType } from '../../contexts/AuthContext'
 
 // -- START OF INTERFACES AND TYPES -- //
 interface DashboardProps {
-    taskList: ModalTaskType[],
+    taskList: TaskType[],
     customerList: CustomerTypes[],
     categoryList: CategoryTypes[]
 }

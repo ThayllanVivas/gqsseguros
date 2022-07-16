@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { FiTrash2, FiX } from 'react-icons/fi'
 import { CommentTypes, CustomerTypes } from '../../pages/dashboard'
 import { setupAPIClient } from '../../services/api';
-import { ModalTaskType } from '../../contexts/AuthContext';
+import { TaskType } from '../../contexts/AuthContext';
 
 interface ModalTaskProps{
   isOpen: boolean;
-  task: ModalTaskType;
+  task: TaskType;
   comments: CommentTypes[];
   customersList: CustomerTypes[]
   onRequestClose: () => void;
@@ -23,8 +23,9 @@ export function ModalComponent({isOpen, task, comments, customersList, onRequest
 
   const [description, setDescription] = useState('')
   const [modal_task, set_modal_task] = useState(task)
-  console.log('->' + task)
   const customer = customersList.find(customer => customer?.id == task?.customer_id)
+
+  // console.log('->>>>>', modal_task)
 
   const customStyles = {
     overlay: {
@@ -72,119 +73,117 @@ export function ModalComponent({isOpen, task, comments, customersList, onRequest
         </button>
       </div>  
 
-        <section className={Styles.containerItem}>          
-          <div id={Styles.taskInfo}>
+      <section className={Styles.containerItem}>          
+        <div id={Styles.taskInfo}>
 
-            {/* sobre ASSEGURADO */}
+          {/* sobre ASSEGURADO */}
 
-            <div className={Styles.sonOfTaskInfo}>
-              <div className={Styles.propertyInfo}>
-                <p className={Styles.details}>Assegurado:</p> 
-              </div>
-
-              <div className={Styles.descriptionInfo}>
-                <span>{customer?.name.toLocaleUpperCase()}</span>
-              </div>
+          <div className={Styles.sonOfTaskInfo}>
+            <div className={Styles.propertyInfo}>
+              <p className={Styles.details}>Assegurado:</p> 
             </div>
 
-            {/* sobre CARRO */}
+            <div className={Styles.descriptionInfo}>
+              <span>{customer?.name.toLocaleUpperCase()}</span>
+            </div>
+          </div>
 
-            <div className={Styles.sonOfTaskInfo}>
-              <div className={Styles.propertyInfo}>
-                <p className={Styles.details}>Carro [NOME]:</p> 
-              </div>
+          {/* sobre CARRO */}
 
-              <div className={Styles.descriptionInfo}>
-                <span>{task.vehicleName.toUpperCase()}</span>
-              </div>
+          <div className={Styles.sonOfTaskInfo}>
+            <div className={Styles.propertyInfo}>
+              <p className={Styles.details}>Carro [NOME]:</p> 
             </div>
 
-            {/* sobre ANO do carro */}
+            <div className={Styles.descriptionInfo}>
+              <span>{task.vehicleName.toUpperCase()}</span>
+            </div>
+          </div>
 
-            <div className={Styles.sonOfTaskInfo}>
-              <div className={Styles.propertyInfo}>
-                <p className={Styles.details}>Carro [ANO]:</p>
-              </div>
+          {/* sobre ANO do carro */}
 
-              <div className={Styles.descriptionInfo}>
-                <span>{task.vehicleYear}</span>
-              </div>
+          <div className={Styles.sonOfTaskInfo}>
+            <div className={Styles.propertyInfo}>
+              <p className={Styles.details}>Carro [ANO]:</p>
             </div>
 
-            {/* sobre VALOR do carro */}
+            <div className={Styles.descriptionInfo}>
+              <span>{task.vehicleYear}</span>
+            </div>
+          </div>
 
-            <div className={Styles.sonOfTaskInfo}>
-              <div className={Styles.propertyInfo}>
-                <p className={Styles.details}>Carro [FIPE]:</p>
-              </div>
+          {/* sobre VALOR do carro */}
 
-              <div className={Styles.descriptionInfo}>
-                <span>R$ {task.vehiclePrice}</span>
-              </div>
+          <div className={Styles.sonOfTaskInfo}>
+            <div className={Styles.propertyInfo}>
+              <p className={Styles.details}>Carro [FIPE]:</p>
             </div>
 
-            {/* sobre DESCRIÇÃO */}
+            <div className={Styles.descriptionInfo}>
+              <span>R$ {task.vehiclePrice}</span>
+            </div>
+          </div>
 
-            {task.description && (
-              <div className={Styles.sonOfTaskInfo}>
-                <div className={Styles.propertyInfo}>
-                  <p className={Styles.details}>Descrição:</p>
-                </div>
-                <div className={Styles.descriptionInfo}>
-                  <span>{task.description}</span>
-                </div>
+          {/* sobre DESCRIÇÃO */}
+
+          {task.description && (
+            <div className={Styles.sonOfTaskInfo}>
+              <div className={Styles.propertyInfo}>
+                <p className={Styles.details}>Descrição:</p>
               </div>
+              <div className={Styles.descriptionInfo}>
+                <span>{task.description}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <hr />
+
+        <div id={Styles.taskCommentsContainer}>
+            {comments.length == 0 ? (
+              <>
+                <h4>Nenhum comentário encontrado</h4>
+              </>
+            ):(
+              <>
+                <h4>Histórico de comentários</h4>
+              </>
             )}
+            {comments.map((comment, index) => {
+              
+              // convert date from object to string to show
+              let timeSlamp = new Date(comment.created_at)
+              let localeDateString = timeSlamp.toLocaleDateString()
+              let localeTimeString = timeSlamp.toLocaleTimeString()
+              let dateTimeComment = [] 
+              dateTimeComment.push(localeDateString)
+              dateTimeComment.push(localeTimeString)
+              let dateTime = dateTimeComment.join(' ')
+
+              return (
+                <>
+                  <div key={comment.id}>
+                    <p className={Styles.commentsContainer}>
+                      <span>{dateTime}: </span> {comment.text}
+                    </p>
+                    {modal_task.status ? (<></>) : (
+                      <button className={Styles.deleteCommentButton} onClick={(event) => {
+                        event.preventDefault() 
+                        onRequestDeleteComment(comment.id)
+                      }}>
+                        <FiTrash2 />
+                      </button>
+                    )}
+                  </div>
+                </>
+              )
+              })}
           </div>
 
           <hr />
-
-          <div id={Styles.taskCommentsContainer}>
-              {comments.length == 0 ? (
-                <>
-                  <h4>Nenhum comentário encontrado</h4>
-                </>
-              ):(
-                <>
-                  <h4>Histórico de comentários</h4>
-                </>
-              )}
-              {comments.map((comment, index) => {
-                
-                // convert date from object to string to show
-                let timeSlamp = new Date(comment.created_at)
-                let localeDateString = timeSlamp.toLocaleDateString()
-                let localeTimeString = timeSlamp.toLocaleTimeString()
-                let dateTimeComment = [] 
-                dateTimeComment.push(localeDateString)
-                dateTimeComment.push(localeTimeString)
-                let dateTime = dateTimeComment.join(' ')
-
-                return (
-                  <>
-                    <div key={comment.id}>
-                      <p className={Styles.commentsContainer}>
-                        <span>{dateTime}: </span> {comment.text}
-                      </p>
-                      {modal_task.status ? (<></>) : (
-                        <button className={Styles.deleteCommentButton} onClick={(event) => {
-                          event.preventDefault() 
-                          onRequestDeleteComment(comment.id)
-                        }}>
-                          <FiTrash2 />
-                        </button>
-                      )}
-                    </div>
-                  </>
-                )
-                })}
-            </div>
-
-            <hr />
-            
-        </section>
-
-
+          
+      </section>
 
       <div>
         {
