@@ -8,7 +8,6 @@ import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { Header } from '../../components/header';
-import { Footer } from '../../components/footer';
 
 export default function SignUp() {
 

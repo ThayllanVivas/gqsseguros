@@ -3,12 +3,13 @@ import Styles from './styles.module.scss';
 
 import { useState } from 'react';
 import { FiTrash2, FiX } from 'react-icons/fi'
-import { TaskTypes, CommentTypes, CustomerTypes } from '../../pages/dashboard'
+import { CommentTypes, CustomerTypes } from '../../pages/dashboard'
 import { setupAPIClient } from '../../services/api';
+import { ModalTaskType } from '../../contexts/AuthContext';
 
 interface ModalTaskProps{
   isOpen: boolean;
-  task: TaskTypes;
+  task: ModalTaskType;
   comments: CommentTypes[];
   customersList: CustomerTypes[]
   onRequestClose: () => void;
@@ -18,7 +19,7 @@ interface ModalTaskProps{
 }
 
 
-export function ModalTask({isOpen, task, comments, customersList, onRequestClose, onRequestFinishUnfinish, onRequestAddComent, onRequestDeleteComment}: ModalTaskProps){
+export function ModalComponent({isOpen, task, comments, customersList, onRequestClose, onRequestFinishUnfinish, onRequestAddComent, onRequestDeleteComment}: ModalTaskProps){
 
   const [description, setDescription] = useState('')
   const [modal_task, set_modal_task] = useState(task)

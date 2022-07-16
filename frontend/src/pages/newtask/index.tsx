@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import { Header } from "../../components/header";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
-import { useState, FormEvent, useEffect } from 'react'
-import { Footer } from "../../components/footer";
+import { useState, FormEvent, useEffect, useContext } from 'react';
 import Router from "next/router";
+import { AuthContext } from "../../contexts/AuthContext";
 
 // -- START OF INTERFACES AND TYPES -- //
 interface ListKind {
@@ -33,6 +33,13 @@ type ItemBranchTypes = {
     name: string;
 }
 
+type CreateTaskType = {
+    data: {
+        id: string,
+        description: string,
+    }
+}
+
 // -- START OF THE COMPONENT -- //
 export default function product({categoryList, branchList, customerList}: ListKind) {
 
@@ -52,6 +59,10 @@ export default function product({categoryList, branchList, customerList}: ListKi
 
     const [categoryCREATEButton, setCategoryCREATEButton] = useState('')
     const [styleCREATEButton, setStyleCREATEButton] = useState(false)
+
+    const {func_toogleOpenCloseModalView} = useContext(AuthContext)
+
+    const api = setupAPIClient()
 
     useEffect(() => {
         setCategoryCREATEButton(categoryList[Number(categorySelected)-1]?.name)
@@ -105,9 +116,10 @@ export default function product({categoryList, branchList, customerList}: ListKi
                 return;
         }
 
+        let data: CreateTaskType
+
         try {
-            const api = setupAPIClient()
-            await api.post("/task", {
+            data = await api.post("/task", {
                 description: description,
                 vehicleName: vehicleName,
                 vehicleYear: vehicleYear,
@@ -129,6 +141,9 @@ export default function product({categoryList, branchList, customerList}: ListKi
         setVehiclePrice("")
         setBranchSelected('')
         setCategorySelected('')
+        // console.log('-<><>: ', data.data.id)
+
+        func_toogleOpenCloseModalView(data.data.id)
 
         Router.push('/dashboard')
     }

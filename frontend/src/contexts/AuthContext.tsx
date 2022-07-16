@@ -1,6 +1,6 @@
 import Router from 'next/router';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import {createContext, ReactNode, useEffect, useState} from 'react'
+import { createContext, ReactNode, useEffect, useState} from 'react'
 import { toast } from 'react-toastify';
 import { api } from '../services/apiClient';
 
@@ -10,15 +10,41 @@ type AuthContextData = {
     signIn: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
     signUp: (credentials: SignUpProps) => Promise<void>;
-    context_toUpdateTasks: () => Promise<void>;
-    context_toUpdateCustomers: () => Promise<void>;
-    context_toUpdateComments: () => Promise<void>;
-    context_updateButton: () => Promise<void>;
-    context_toogleFinishUnfinishTask: (TASK) => Promise<void>;
-    context_updateModalData: (TASK_ID) => Promise<void>;
-    context_toogleOpenCloseModalView: (TASK_ID) => Promise<void>;
-    context_handleAddComment: (comment: string) => Promise<void>;
-    context_handleDeleteComment: (comment_id) => Promise<void>;
+
+    modalViewStatus: boolean;
+    setModalViewStatus: (value: boolean) => void;
+    modalTask: ModalTaskType;
+    setModalTask: (value: ModalTaskType) => void;
+    modalTaskID: string;
+    setModalTaskID: (value: string) => void;
+    modalComments: CommentTaskType[];
+    setModalComments: (value: CommentTaskType[]) => void;
+
+    func_updateModalData: (TASK_ID: string) => Promise<void>;
+    func_toogleOpenCloseModalView: (TASK_ID?: string) => Promise<void>;
+}
+
+export type ModalTaskType = {
+    id: string,
+    status: string,
+    description: string,
+
+    vehicleName: string,
+    vehiclePrice: string,
+    vehicleYear: string,
+
+    user_id: string,
+    branch_id: string,
+    category_id: string,
+    customer_id: string,
+    created_at: string
+}
+
+type CommentTaskType = {
+    id: string,
+    text: string,
+    task_id: string,
+    created_at: string
 }
 
 type SignInProps = {
@@ -63,11 +89,19 @@ async function toastMessage (type: string, msg: string){
     await delay(0)
 }
 
+// CREATE CONTEXT section
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({children}: AuthProviderProps) {
 
     const [user, setUser] = useState<UserProps>()
+    const [tasks, setTasks] = useState([]) //KEEP IT ON THIS COMPONENT
+    
+    const [modalViewStatus, setModalViewStatus] = useState(false) //KEEP IT ON THIS COMPONENT
+    const [modalTask, setModalTask] = useState<ModalTaskType>() //KEEP IT ON THIS COMPONENT
+    const [modalTaskID, setModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
+    const [modalComments, setModalComments] = useState<CommentTaskType[]>([]) //KEEP IT ON THIS COMPONENT
+
     const isAuthenticated = !!user;
 
     //verify token of the user
@@ -85,6 +119,14 @@ export function AuthProvider({children}: AuthProviderProps) {
                 signOut()
             })
         }
+
+        async function toGetAllTask(){
+            const taskList = await api.get("/task")
+
+            setTasks(taskList.data)
+        }
+
+        toGetAllTask()
     }, [])
 
     //  SIGN IN function
@@ -140,109 +182,55 @@ export function AuthProvider({children}: AuthProviderProps) {
     }
 
     // -> function to INSERT data inside of the modal variable
-    async function context_toUpdateTasks(){
-        const response  = await api.get("/task")
-        set_tasks(response.data)
-    }
-
-    // -> function to INSERT data inside of the customer variable
-    async function context_toUpdateCustomers(){
-        const response = await api.get("/customer")
-        set_customers(response.data)
-    }
-
-    // -> function to INSERT data inside of the modal variable
-    async function context_toUpdateComments(){
+    async function func_toUpdateCommments(){
         const response = await api.get("/comment")
         return response.data
     }
 
-    // -> function to GET all data updated 
-    async function context_updateButton(){
-        toast.success('Dashboard atualizado')
-        await context_toUpdateTasks()
-        await context_toUpdateCustomers()
-        await context_toUpdateComments()
-    }
-
-    // -> function to FINISH or UNFINISH a task
-    async function context_toogleFinishUnfinishTask(TASK){
-
-        const response = await api.put("/task/finish-unfinish", {
-            id: TASK.id,
-            status: TASK.status
-        })
-
-        if(response.data.status){
-            toast.success('Tarefa concluída!')
-        } else {
-            toast.warning('Status de conclusão desfeito!')
-        }
-        
-        await context_toUpdateTasks()
-    }
-
     // -> function to UPDATE data for modal
-    async function context_updateModalData(TASK_ID: string){
-        const response = await context_toUpdateComments() // to update the user comments
+    async function func_updateModalData(TASK_ID: string){
+        // console.log('-<><t>: ', TASK_ID)
+        const commentsUpdatedResponse: CommentTaskType[] = await func_toUpdateCommments() // to update the user comments
+        let commentsFilteredForModal = [] //to aux
     
         const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
-        let commentsFilteredForModal = [] //to aux
-
-        response.map((comment: any) => {
+        commentsUpdatedResponse.map((comment: CommentTaskType) => {
             if(comment.task_id === TASK_ID) {
                 commentsFilteredForModal.push(comment)
             }
         })
 
-        set_modal_task(taskFilteredForModal) //set modal task
-        set_modal_task_ID(TASK_ID) //set ID of modal task
-        set_modal_comments(commentsFilteredForModal) //set modal comments
+        setModalTask(taskFilteredForModal) //set modal task
+        setModalTaskID(TASK_ID) //set ID of modal task
+        setModalComments(commentsFilteredForModal) //set modal comments
     }
 
-    // -> function to OPEN / CLOSE modal
-    async function context_toogleOpenCloseModalView(TASK_ID?: string){
-        // await context_updateButton()
-        await context_updateModalData(TASK_ID)
-        set_moda_view(!modal_view)
-    }
-
-    // -> function to ADD a coment on database
-    async function context_handleAddComment(description: string){
-
-        //verify is the user really types anything
-        if(description.length == 0){
-          toast.error("Insira algum comentário antes")
-          return
-        }
-    
-        //insert the new comment inside database
-        await api.post('/comment', {
-          text: description,
-          task_id: modal_task_ID
-        })
-    
-        toast.success("Comentário adicionado com sucesso") //show a sucess message to user
-
-        await context_updateModalData(modal_task_ID) //call function to update modal data
-        
-    }
-
-    // -> function to DELETE a coment on database
-    async function context_handleDeleteComment(comment_id: string){    
-        await api.delete("/comment", {
-            data: {
-                id: comment_id
-            }
-        })
-
-        toast.success("Comentário removido com sucesso")
-
-        await context_updateModalData(modal_task_ID) //call function to update modal data
+    // -> function to OPEN or CLOSE modal
+    async function func_toogleOpenCloseModalView(TASK_ID?: string){
+        // console.log('-<><s>: ', TASK_ID)
+        await func_updateModalData(TASK_ID)
+        setModalViewStatus(!modalViewStatus) // set modal view status
     }
 
     return (
-        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp, context_toogleFinishUnfinishTask, context_toogleOpenCloseModalView, context_toUpdateCustomers, context_toUpdateTasks, context_toUpdateComments, context_updateButton, context_updateModalData, context_handleAddComment, context_handleDeleteComment}}>
+        <AuthContext.Provider value={
+            {
+                user, 
+                isAuthenticated, 
+                signIn, signOut, 
+                signUp, 
+                modalViewStatus, 
+                setModalViewStatus,
+                modalTask,
+                setModalTask, 
+                modalTaskID, 
+                setModalTaskID, 
+                modalComments, 
+                setModalComments,
+                func_updateModalData,
+                func_toogleOpenCloseModalView, 
+            }
+        }>
             {children}
         </AuthContext.Provider>
     )

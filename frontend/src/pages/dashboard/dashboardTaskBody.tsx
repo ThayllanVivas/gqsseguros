@@ -1,9 +1,10 @@
-import { CategoryTypes, CustomerTypes, TaskTypes } from "./index"
+import { CategoryTypes, CustomerTypes } from "./index"
 import Styles from './dashboard.module.scss'
+import { ModalTaskType } from "../../contexts/AuthContext"
 
 interface TaskProps {
     date: string,
-    tasks: TaskTypes[],
+    tasks: ModalTaskType[],
     customers: CustomerTypes[],
     handleOpenModalView: (task_id: string) => void,
     categoryList: CategoryTypes[]
