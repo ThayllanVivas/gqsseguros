@@ -1,18 +1,16 @@
 // -- IMPORTs AREA -- //
-import Styles from './dashboard.module.scss'
-import DashboardTaskBody from './dashboardTaskBody'
-
 import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
 import { FiRefreshCcw } from "react-icons/fi"
 import { setupAPIClient } from '../../services/api'
+import { CustomerTypes, TaskTypes, CategoryTypes, TaskDateType } from './index'
+import Styles from './dashboard.module.scss'
+import DashboardTaskBody from './dashboardTaskBody'
 import { ModalComponent } from '../../components/modal'
-import { useEffect, useState } from 'react'
-import { CommentTaskType, TaskType } from '../../contexts/AuthContext'
-import { CustomerTypes, CategoryTypes, TaskDateType } from './index'
 
 // -- INTERFACE and TYPEs AREA -- //
 interface DASHBOARDPROPS {
-    taskList: TaskType[],
+    taskList: TaskTypes[],
     customerList: CustomerTypes[],
     categoryList: CategoryTypes[],
     taskDates: TaskDateType[]
@@ -26,10 +24,10 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     const [tasksStatusFalseQuantity, set_tasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
     const [customers, set_customers] = useState(customerList) //KEEP IT ON THIS COMPONENT
 
-    const [modalTask, setModalTask] = useState<TaskType>()
-    const [modalTaskID, setModalTaskID] = useState('')
-    const [modalComments, setModalComments] = useState([])
-    const [modalViewStatus, setModalViewStatus] = useState<boolean>(false)
+    const [modal_view, set_moda_view] = useState(false) //KEEP IT ON THIS COMPONENT
+    const [modal_task, set_modal_task] = useState<any>() //KEEP IT ON THIS COMPONENT
+    const [modal_task_ID, set_modal_task_ID] = useState<string>('') // KEEP IT ON THIS COMPONENT
+    const [modal_comments, set_modal_comments] = useState([]) //KEEP IT ON THIS COMPONENT
 
     const api = setupAPIClient()
 
@@ -57,7 +55,6 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         toUpdateTasksStatus()
     }, [tasks])
 
-
     // -> function to INSERT data inside of the modal variable
     async function func_toUpdateTasks(){
         const response  = await api.get("/task")
@@ -71,7 +68,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     }
 
     // -> function to INSERT data inside of the modal variable
-    async function func_toUpdateCommments(){
+    async function func_toUpdateUserCommments(){
         const response = await api.get("/comment")
         return response.data
     }
@@ -81,7 +78,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         toast.success('Dashboard atualizado')
         await func_toUpdateTasks()
         await func_toUpdateCustomers()
-        await func_toUpdateCommments()
+        await func_toUpdateUserCommments()
     }
 
     // -> function to FINISH or UNFINISH a task
@@ -100,7 +97,32 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         
         await func_toUpdateTasks()
     }
+
+    // -> function to UPDATE data for modal
+    async function func_updateModalData(TASK_ID: string){
+        const response = await func_toUpdateUserCommments() // to update the user comments
     
+        const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
+        let commentsFilteredForModal = [] //to aux
+
+        response.map((comment: any) => {
+            if(comment.task_id === TASK_ID) {
+                commentsFilteredForModal.push(comment)
+            }
+        })
+
+        set_modal_task(taskFilteredForModal) //set modal task
+        set_modal_task_ID(TASK_ID) //set ID of modal task
+        set_modal_comments(commentsFilteredForModal) //set modal comments
+    }
+
+    // -> function to OPEN / CLOSE modal
+    async function func_toogleOpenCloseModalView(TASK_ID?: string){
+        // await func_updateButton()
+        await func_updateModalData(TASK_ID)
+        set_moda_view(!modal_view)
+    }
+
     // -> function to ADD a coment on database
     async function func_handleAddComment(comment: string){
 
@@ -113,12 +135,12 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
         //insert the new comment inside database
         await api.post('/comment', {
           text: comment,
-          task_id: modalTaskID
+          task_id: modal_task_ID
         })
     
         toast.success("Comentário adicionado com sucesso") //show a sucess message to user
 
-        await func_updateModalData(modalTaskID) //call function to update modal data
+        await func_updateModalData(modal_task_ID) //call function to update modal data
         
     }
 
@@ -132,36 +154,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
 
         toast.success("Comentário removido com sucesso")
 
-        await func_updateModalData(modalTaskID) //call function to update modal data
-    }
-
-    // -> function to UPDATE data for modal
-    async function func_updateModalData(TASK_ID: string){
-
-        const commentsUpdatedResponse: CommentTaskType[] = await func_toUpdateCommments() // to update the user comments
-        const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
-        let commentsFilteredForModal = [] //to aux
-
-        // commentsUpdatedResponse.map((comment: CommentTaskType) => {
-        //     if(comment.task_id === TASK_ID) {
-        //         commentsFilteredForModal.push(comment)
-        //     }
-        // })
-        commentsUpdatedResponse.find((comment: CommentTaskType) => {
-            if(comment.task_id === TASK_ID) {
-                commentsFilteredForModal.push(comment)
-            }
-        })
-
-        setModalTask(taskFilteredForModal) //set modal task
-        setModalTaskID(TASK_ID) //set ID of modal task
-        setModalComments(commentsFilteredForModal) //set modal comments
-    }
-
-    // -> function to OPEN or CLOSE modal
-    async function func_toogleOpenCloseModalView(TASK_ID?: string){
-        await func_updateModalData(TASK_ID)
-        setModalViewStatus(!modalViewStatus) // set modal view status
+        await func_updateModalData(modal_task_ID) //call function to update modal data
     }
 
     return (
@@ -216,11 +209,11 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
                 </main>
 
                 <div>
-                    {modalViewStatus && (
-                        <ModalComponent 
-                            isOpen={modalViewStatus}
-                            task={modalTask}
-                            comments={modalComments}
+                    {modal_view && (
+                        <ModalComponent
+                            isOpen={modal_view}
+                            task={modal_task}
+                            comments={modal_comments}
                             customersList={customers}
                             onRequestClose={func_toogleOpenCloseModalView}
                             onRequestFinishUnfinish={func_toogleFinishUnfinishTask}

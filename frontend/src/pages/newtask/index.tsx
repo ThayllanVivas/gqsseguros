@@ -5,10 +5,9 @@ import { toast } from "react-toastify";
 import { Header } from "../../components/header";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
-import { useState, FormEvent, useEffect, useContext } from 'react';
+import { useState, FormEvent, useEffect } from 'react'
+import { Footer } from "../../components/footer";
 import Router from "next/router";
-import { AuthContext, TaskType } from "../../contexts/AuthContext";
-import { ModalComponent } from "../../components/modal";
 
 // -- START OF INTERFACES AND TYPES -- //
 interface ListKind {
@@ -34,19 +33,12 @@ type ItemBranchTypes = {
     name: string;
 }
 
-type CreateTaskType = {
-    data: {
-        id: string,
-        description: string,
-    }
-}
-
 // -- START OF THE COMPONENT -- //
 export default function product({categoryList, branchList, customerList}: ListKind) {
 
     const [branches, setBranches] = useState(branchList)
     const [categories, setCategories] = useState(categoryList)
-    const [customers, setCustomers] = useState(customerList)
+    const [constumers, setConstumers] = useState(customerList)
 
     const [description, setDescription] = useState('')
 
@@ -60,15 +52,6 @@ export default function product({categoryList, branchList, customerList}: ListKi
 
     const [categoryCREATEButton, setCategoryCREATEButton] = useState('')
     const [styleCREATEButton, setStyleCREATEButton] = useState(false)
-
-    const [modalTask, setModalTask] = useState<TaskType>()
-    const [modalTaskID, setModalTaskID] = useState('')
-    const [modalComments, setModalComments] = useState([])
-    const [modalViewStatus, setModalViewStatus] = useState<boolean>(false)
-
-    const {func_toogleOpenCloseModalView, func_toogleFinishUnfinishTask, func_handleAddComment, func_handleDeleteComment} = useContext(AuthContext)
-
-    const api = setupAPIClient()
 
     useEffect(() => {
         setCategoryCREATEButton(categoryList[Number(categorySelected)-1]?.name)
@@ -122,10 +105,9 @@ export default function product({categoryList, branchList, customerList}: ListKi
                 return;
         }
 
-        let data: CreateTaskType
-
         try {
-            data = await api.post("/task", {
+            const api = setupAPIClient()
+            await api.post("/task", {
                 description: description,
                 vehicleName: vehicleName,
                 vehicleYear: vehicleYear,
@@ -147,11 +129,10 @@ export default function product({categoryList, branchList, customerList}: ListKi
         setVehiclePrice("")
         setBranchSelected('')
         setCategorySelected('')
-        // console.log('-<><>: ', data.data.id)
-
-        func_toogleOpenCloseModalView(data.data.id)
 
         Router.push('/dashboard')
+
+        
     }
 
     // --- RETURN --- //
@@ -197,7 +178,7 @@ export default function product({categoryList, branchList, customerList}: ListKi
                         <option key="default" value="--Selecione um cliente--">
                         -- Selecione um cliente --
                         </option>
-                        {customers.map( (constumer, index) => { 
+                        {constumers.map( (constumer, index) => { 
                             return (
                                 <option key={constumer.id} value={constumer.id}>
                                     {constumer.name}
@@ -253,21 +234,6 @@ export default function product({categoryList, branchList, customerList}: ListKi
 
                 </form>
             </main>
-
-            <div>
-                    {modalViewStatus && (
-                        <ModalComponent 
-                            isOpen={modalViewStatus}
-                            task={modalTask}
-                            comments={modalComments}
-                            customersList={customers}
-                            onRequestClose={func_toogleOpenCloseModalView}
-                            onRequestFinishUnfinish={func_toogleFinishUnfinishTask}
-                            onRequestAddComent={func_handleAddComment}
-                            onRequestDeleteComment={func_handleDeleteComment}
-                        />
-                    )}
-                </div>
         </>
     )
 }

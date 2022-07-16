@@ -5,11 +5,10 @@ import { Body } from './dashboardBody'
 import { Header } from "../../components/header"
 import { canSSRAuth } from "../../utils/canSSRAuth"
 import { setupAPIClient } from "../../services/api"
-import { TaskType } from '../../contexts/AuthContext'
 
 // -- START OF INTERFACES AND TYPES -- //
 interface DashboardProps {
-    taskList: TaskType[],
+    taskList: TaskTypes[],
     customerList: CustomerTypes[],
     categoryList: CategoryTypes[]
 }
@@ -31,6 +30,22 @@ export type CommentTypes = {
 export type CategoryTypes = {
     id: string,
     name: string
+}
+
+export type TaskTypes = {
+    id: string,
+    status: string,
+    description: string,
+
+    vehicleName: string,
+    vehiclePrice: string,
+    vehicleYear: string,
+
+    user_id: string,
+    branch_id: string,
+    category_id: string,
+    customer_id: string,
+    created_at: string
 }
 
 export type TaskDateType = {
