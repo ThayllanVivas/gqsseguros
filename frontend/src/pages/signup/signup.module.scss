@@ -1,54 +1,127 @@
-.TheFather {
+#newUserContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
     width: 1300px;
     display: flex;
     margin: 0 auto;
-    // justify-content: space-between;
 
-    .containerCenter {
-        min-width: 50%;
-        max-width: 50%;
-        min-height: 90vh;
+    // USERS LIST SECTION
+    #userContainer {
+        width: 49%;
+        // height: 80vh;
+        overflow-x: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: var(--white);
+
+        #userContainerHeader{
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 1rem;
+            justify-content: space-around;
+            width: 100%;
+
+            h1 {
+                display: flex;
+                justify-content: right;
+                width: 70%;
+                // background-color: antiquewhite;
+            }
+
+            #refreshButton {
+                background: transparent;
+                width: 30%;
+                border: 0;
+                // background-color: aquamarine;
+                margin-left: 0.5rem;
+                color: var(--green-900);
+                font-size: 22px;
+                padding-top: 0.3rem;
+            }
+        }
+
+        
+        
+        ul.usersList {
+            padding: 1rem 0;
+            width: 100%;
+            display: inherit;
+            flex-direction: inherit;
+            align-items: center;
+
+            
+            li {
+                width: inherit;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 1rem;
+
+                list-style-type: circle;
+                padding: 0.4rem 0.3rem;
+                border-radius: 0.4rem;
+                background-color: var(--dark-700);
+
+                .userStatusOn {
+                    background-color: var(--main-button);
+                }
+                .userStatusOff {
+                    background-color: var(--red-900);
+                }
+
+                .userStatusOn, .userStatusOff {
+                    border: 0px;
+                    font-weight: bold;
+                }
+
+                .name, .email, .userStatusOn, .userStatusOff {
+                    width: 31%;
+                    margin: 0 1%;
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.3rem;
+                }
+
+                
+            }
+        }
+    }
+
+    //DIVISORY IN THE MIDDLE OF CONTAINERS
+    #divisory {
+        width: 0.2%;
+        background-color: var(--dark-700);
+    }
+    
+    // SIGNUP SECTION
+    #signUpContainer {
+        width: 49%;
+        // height: 80vh;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: var(--gray-900);
+    
+        h1 {
+            display: flex;
+            color: var(--white);
+            padding-bottom: 1rem;
+            margin-top: 2rem;
+        }
+    
+        form {
+          width: 90%;  
+          display: flex;
+          flex-direction: column;
+        }
     }
+    
 }
-
-.signin {
-    margin-top: 2rem;
-    width: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-
-    h1 {
-        display: flex;
-        color: var(--white);
-        padding-bottom: 1rem;
-    }
-
-    form {
-      width: 90%;  
-      display: flex;
-      flex-direction: column;
-    }
-}
-
-// .text {
-//     margin-top: 1rem;
-//     color: var(--white);
-//     cursor: pointer;
-// }
 
 @media (max-width: 620px) {
-    .signin {
+    .signUp {
         width: 90%;
     }
 }

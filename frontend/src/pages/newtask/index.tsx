@@ -1,13 +1,13 @@
 // -- START OF IMPORTS -- //
 import Head from "next/head";
+import Router from "next/router";
 import Styles from './newtask.module.scss'
 import { toast } from "react-toastify";
 import { Header } from "../../components/header";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import { useState, FormEvent, useEffect } from 'react'
-import { Footer } from "../../components/footer";
-import Router from "next/router";
+
 
 // -- START OF INTERFACES AND TYPES -- //
 interface ListKind {
@@ -35,6 +35,7 @@ type ItemBranchTypes = {
 
 // -- START OF THE COMPONENT -- //
 export default function product({categoryList, branchList, customerList}: ListKind) {
+    const api = setupAPIClient()
 
     const [branches, setBranches] = useState(branchList)
     const [categories, setCategories] = useState(categoryList)
@@ -106,7 +107,6 @@ export default function product({categoryList, branchList, customerList}: ListKi
         }
 
         try {
-            const api = setupAPIClient()
             await api.post("/task", {
                 description: description,
                 vehicleName: vehicleName,
@@ -241,9 +241,9 @@ export default function product({categoryList, branchList, customerList}: ListKi
 export const getServerSideProps = canSSRAuth(async(ctx) => {
     const api = setupAPIClient(ctx)
 
-    const branchList = await api.get("/branch")
-    const categoryList = await api.get("/category")
-    const customerList = await api.get("/customer")
+    const branchList = await api.get("/branches")
+    const categoryList = await api.get("/categories")
+    const customerList = await api.get("/customers")
 
     return {
         props: {

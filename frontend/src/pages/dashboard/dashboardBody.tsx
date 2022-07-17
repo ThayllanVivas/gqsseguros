@@ -34,7 +34,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     // effect to change status of the tasks
     useEffect(() => {
         async function toUpdateTasksStatus(){
-            const response  = await api.get("/task")
+            const response  = await api.get("/tasks")
 
             let statusTRUE = 0
             let statusFALSE = 0
@@ -56,51 +56,52 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
     }, [tasks])
 
     // -> function to INSERT data inside of the modal variable
-    async function func_toUpdateTasks(){
-        const response  = await api.get("/task")
+    async function func_updateTask(){
+        const response  = await api.get("/tasks")
         set_tasks(response.data)
     }
 
     // -> function to INSERT data inside of the customer variable
-    async function func_toUpdateCustomers(){
-        const response = await api.get("/customer")
+    async function func_updateCustomer(){
+        const response = await api.get("/customers")
         set_customers(response.data)
     }
 
     // -> function to INSERT data inside of the modal variable
-    async function func_toUpdateUserCommments(){
-        const response = await api.get("/comment")
+    async function func_updateComments(){
+        const response = await api.get("/comments")
         return response.data
     }
 
     // -> function to GET all data updated 
     async function func_updateButton(){
         toast.success('Dashboard atualizado')
-        await func_toUpdateTasks()
-        await func_toUpdateCustomers()
-        await func_toUpdateUserCommments()
+        await func_updateTask()
+        await func_updateCustomer()
+        await func_updateComments()
     }
 
     // -> function to FINISH or UNFINISH a task
-    async function func_toogleFinishUnfinishTask(TASK){
+    async function func_updateTaskStatus(TASK){
 
-        const response = await api.put("/task/finish-unfinish", {
+        const response = await api.put("/task/status", {
             id: TASK.id,
             status: TASK.status
         })
 
         if(response.data.status){
             toast.success('Tarefa concluída!')
+            set_moda_view(false)
         } else {
             toast.warning('Status de conclusão desfeito!')
         }
         
-        await func_toUpdateTasks()
+        await func_updateTask()
     }
 
     // -> function to UPDATE data for modal
     async function func_updateModalData(TASK_ID: string){
-        const response = await func_toUpdateUserCommments() // to update the user comments
+        const response = await func_updateComments() // to update the user comments
     
         const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
         let commentsFilteredForModal = [] //to aux
@@ -216,7 +217,7 @@ export function Body({taskList, customerList, categoryList, taskDates}: DASHBOAR
                             comments={modal_comments}
                             customersList={customers}
                             onRequestClose={func_toogleOpenCloseModalView}
-                            onRequestFinishUnfinish={func_toogleFinishUnfinishTask}
+                            onRequestFinishUnfinish={func_updateTaskStatus}
                             onRequestAddComent={func_handleAddComment}
                             onRequestDeleteComment={func_handleDeleteComment}
                         />

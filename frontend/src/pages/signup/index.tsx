@@ -1,22 +1,56 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import logoImg from '../../../public/logo.png';
-import styles from './signup.module.scss';
+import STYLES from './signup.module.scss';
 import { Input } from '../../components/ui/input/index';
 import { Button } from '../../components/ui/button';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { Header } from '../../components/header';
+import { api } from '../../services/apiClient';
+import { setupAPIClient } from '../../services/api';
+import { canSSRAuth } from '../../utils/canSSRAuth';
+import { FiRefreshCcw } from 'react-icons/fi';
 
-export default function SignUp() {
+
+interface SignUpProps {
+  usersList: UsersType[]
+}
+
+type UsersType = {
+  id: string,
+  name: string,
+  email: string,
+  admin_mode: boolean,
+  status: boolean
+}
+
+type ChangeUserStatusType = {
+  id: string,
+  status: boolean
+}
+
+
+export default function SignUp({usersList}: SignUpProps) {
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
   const [password, setPassword] = useState('')
+  const [users, setUsers] = useState(usersList)
 
   const {signUp} = useContext(AuthContext)
+
+  async function func_updateButton(){
+    await toGetUsers()
+    toast.success('Usuários atualizados')
+  }
+
+  async function toGetUsers(){
+    const response = await api.get('/users')
+    setUsers(response.data)
+  }
 
   async function handleSignUp(event: FormEvent){  
     event.preventDefault();
@@ -32,10 +66,24 @@ export default function SignUp() {
       name, email, password
     }
 
-    await signUp(data)
+    await signUp(data) //to insert new user inside database
 
+    setName('')
+    setEmail('')
     setLoading(false)
+    setPassword('')
 
+    toGetUsers() // to upate users variable
+  }
+
+  async function hanleChangeUserStatus(user: ChangeUserStatusType) {
+    const response = await api.put('/user/status', {
+      id: user.id,
+      status: user.status
+    })
+
+    // console.log(response.data)
+    await toGetUsers() //to update USERS
   }
 
   return (
@@ -46,44 +94,95 @@ export default function SignUp() {
 
       <Header activePage='signUpPage'/>
 
-      <div className={styles.TheFather}>
-        <div className={styles.containerCenter}>
-          <Image src={logoImg} alt="Logo Sujeito Pizzaria" />
+      <div id={STYLES.newUserContainer}>
 
-          <div className={styles.signin}>
-              <h1>Criando nova conta</h1>
+        <div id={STYLES.userContainer}>
 
-              <form onSubmit={handleSignUp}>
-                <Input 
-                    placeholder="Digite seu nome"
-                    type="text"
-                    value={name}
-                    onChange={ (e) => setName(e.target.value) }
-                />
+          <div id={STYLES.userContainerHeader}>
+            <h1>Lista de usuários</h1>
 
-                <Input 
-                    placeholder="Digite seu email"
-                    type="text"
-                    value={email}
-                    onChange={ (e) => setEmail(e.target.value) }
-                />
-                <Input 
-                    placeholder="Digite sua senha"
-                    type="password"
-                    value={password}
-                    onChange={ (e) => setPassword(e.target.value) }
-                />
-
-                <Button
-                    type="submit"
-                    loading={loading}
-                    >
-                    Cadastrar
-                </Button>
-              </form>
+            <button id={STYLES.refreshButton} onClick={() => func_updateButton()}>
+                <FiRefreshCcw />
+            </button>
           </div>
+
+          
+          <ul className={STYLES.usersList}>
+
+            {users.map((user, index) => {
+              return(
+                <>
+                  <li key={user.id}> 
+                    <span className={STYLES.name}>
+                      {user.name.toUpperCase()}
+                    </span> 
+                    | 
+                    <span className={STYLES.email}>
+                      {user.email.toLowerCase()}
+                    </span>
+                    |
+                    <button className={user.status ? STYLES.userStatusOn : STYLES.userStatusOff} onClick={(e) => hanleChangeUserStatus(user)}>
+                      {user.status ? 'ATIVO' : 'INATIVO'}
+                    </button>
+                  </li>
+                </>
+              )
+            })}
+
+          </ul>
+
         </div>
+
+        <span id={STYLES.divisory}></span>
+
+        <div id={STYLES.signUpContainer}>
+            <Image src={logoImg} alt="Logo Sujeito Pizzaria" />
+
+            <h1>Criando nova conta</h1>
+
+            <form onSubmit={handleSignUp}>
+              <Input 
+                  placeholder="Ex: João Alves"
+                  type="text"
+                  value={name}
+                  onChange={ (e) => setName(e.target.value) }
+              />
+
+              <Input 
+                  placeholder="Ex: joaoalves@example.com"
+                  type="text"
+                  value={email}
+                  onChange={ (e) => setEmail(e.target.value) }
+              />
+              <Input 
+                  placeholder="*********"
+                  type="password"
+                  value={password}
+                  onChange={ (e) => setPassword(e.target.value) }
+              />
+
+              <Button
+                  type="submit"
+                  loading={loading}
+                  >
+                  Cadastrar
+              </Button>
+            </form>
+        </div>
+
       </div>
     </>
   )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+
+  const api = setupAPIClient(ctx)
+  const usersList = await api.get("/users")
+
+  return {
+    props: {
+      usersList: usersList.data,
+    }
+  }
+})

@@ -22,7 +22,6 @@ export function ModalComponent({isOpen, task, comments, customersList, onRequest
 
   const [description, setDescription] = useState('')
   const [modal_task, set_modal_task] = useState(task)
-  console.log('->' + task)
   const customer = customersList.find(customer => customer?.id == task?.customer_id)
 
   const customStyles = {

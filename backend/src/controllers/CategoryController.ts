@@ -1,12 +1,27 @@
-import { prisma } from "@prisma/client";
-import prismaClient from "../../prisma";
+import { NextFunction, Request, Response } from "express";
+import prismaClient from "../prisma";
 
-interface CATEGORYREQUEST{
-    name: string;
-}
+class CategoryController {
 
-class CreateCategory_SERVICE{
-    async execute({name}: CATEGORYREQUEST){
+    // list all categories
+    async Categories(req: Request, res: Response, next: NextFunction){
+
+        const response = await prismaClient.category.findMany(
+            {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            }
+        )
+
+        return res.json(response);
+    }
+
+    // create a category
+    async CategoryCreate(req: Request, res: Response, next: NextFunction){
+
+        const {name} = req.body;
 
         //validating name of category
         if(!name){
@@ -20,8 +35,7 @@ class CreateCategory_SERVICE{
                     name: name
                 }
             }
-        )
-        
+        )   
         if (categoryExists && categoryExists.name == name){
             return "Category already exists!!!"
             // throw new Error("Category already exists!!")
@@ -40,8 +54,8 @@ class CreateCategory_SERVICE{
             }
         )
         
-        return response
+        return res.json(response)
     }
 }
 
-export {CreateCategory_SERVICE}
+export {CategoryController}

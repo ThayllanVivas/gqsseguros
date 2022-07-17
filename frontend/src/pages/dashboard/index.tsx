@@ -112,9 +112,9 @@ export default function Dashboard({taskList, customerList, categoryList}: Dashbo
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
     const api = setupAPIClient(ctx)
-    const taskList = await api.get("/task")
-    const customerList = await api.get("/customer")
-    const categoryList = await api.get("/category")
+    const taskList = await api.get("/tasks")
+    const customerList = await api.get("/customers")
+    const categoryList = await api.get("/categories")
 
     return {
       props: {

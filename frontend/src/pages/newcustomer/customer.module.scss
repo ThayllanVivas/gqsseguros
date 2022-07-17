@@ -79,6 +79,19 @@
                 margin-left: 1%;
             }
 
+            .buttonCleanDISABLED {
+                min-width: 39%;
+                height: 40px;
+                border: 0;
+                background-color: var(--red-900);
+                opacity:  0.5;
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                margin-left: 1%;
+            }
+
             .buttonAdd {
                 min-width: 60%;
                 height: 40px;

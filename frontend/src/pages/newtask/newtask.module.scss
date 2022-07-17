@@ -72,7 +72,8 @@
         .buttonAddDisabled {
             height: 40px;
             border: 0;
-            background-color: var(--red-900);
+            background-color: var(--green-900);
+            opacity: 0.5;
             font-weight: bold;
             font-size: 1.2rem;
             border-radius: 0.3rem;

@@ -107,8 +107,7 @@ export function AuthProvider({children}: AuthProviderProps) {
             // Router.push("/dashboard")
             Router.push('/dashboard')
         } catch (err){
-            toast.error("Erro ao acessar!")
-            console.log("Erro ao acessar " , err)
+            toast.error(err.response.data)
         }
     }
 
@@ -123,7 +122,7 @@ export function AuthProvider({children}: AuthProviderProps) {
             // Exibir mensagem de sucesso
             toast.success("Conta criada com sucesso")
 
-            Router.push('/')
+            // Router.push('/')
         } catch (err) {
             toast.error("Erro ao criar conta!")
             console.log('ERRO AO CADASTRAR')

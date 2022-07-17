@@ -10,13 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//code to create an migration: "yarn prisma migrate dev"
 
-//criar uma migration: "yarn prisma migrate dev"
+
 model User {
   id String @default(uuid())
   name String
   email String
   password String
+
+  status Boolean @default(true)
   admin_mode Boolean @default(false)
 
   created_at DateTime? @default(now())

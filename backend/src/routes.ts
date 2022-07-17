@@ -1,60 +1,46 @@
 import isAuthenticated from './middlewares/isAuthenticated';
 
 import { Router } from 'express';
-import { AuthUser_CONTROLLER } from './controllers/user/AuthUser_Controller'
-import { CreateUser_CONTROLLER } from './controllers/user/CreateUser_Controller'
-import { DetailsUser_CONTROLLER } from './controllers/user/DetailsUser_Controller';
 
-import { ListCategory_CONTROLLER } from './controllers/category/ListCategory_Controller';
-import { CreateCategory_CONTROLLER } from './controllers/category/CreateCategory_Controller';
-
-import { ListTask_CONTROLLER } from './controllers/task/ListTask_Controller';
-import { CreateTask_CONTROLLER } from './controllers/task/CreateTask_Controller';
-import { FinishTask_CONTROLLER } from './controllers/task/FinishTask_Controller';
-import { DeleteComment_CONTROLLER } from './controllers/comment/DeleteComment_Controller';
-import { ListTaskSpecific_CONTROLLER } from './controllers/task/ListTaskSpecific_Controller';
-import { ListTaskByCategories_CONTROLLER } from './controllers/task/ListTaskByCategories_Controller';
-
-import { CreateComment_CONTROLLER } from './controllers/comment/CreateComment_Controller';
-import { GetComment_CONTROLLER } from './controllers/comment/GetUserComment_Controller';
-
-import { ListAllBranches_CONTROLLER } from './controllers/branch/ListAllBranches_Controller';
-
-import { ListCustomer_CONTROLLER } from './controllers/customer/ListCustomer_Controller';
-import { CreateCustomer_CONTROLLER } from './controllers/customer/CreateCustomer_Controller';
-import { EditComment_CONTROLLER } from './controllers/comment/EditComment_Controller';
-import { GetSpecificComment_CONTROLLER } from './controllers/comment/GetSpecificComment_Controller';
+import { UserController } from './controllers/UserController';
+import { CategoryController } from './controllers/CategoryController';
+import { TaskController } from './controllers/TaskController';
+import { CommentController } from './controllers/CommentController';
+import { CustomerController } from './controllers/CustommerController';
+import { BranchesController } from './controllers/BranchesController';
 
 const router = Router(); //to copy what is inside Router() into router const
 
 // ROTA USER 
-router.get("/me", isAuthenticated, (new DetailsUser_CONTROLLER).handle); //access my profile
-router.post("/signup", new CreateUser_CONTROLLER().handle); //create new user 
-router.post("/signin", (new AuthUser_CONTROLLER).handle); //make login
+router.get("/me", isAuthenticated, new UserController().User); //access my profile
+router.get("/users", isAuthenticated, new UserController().Users); //get all users
+router.put('/user/status', isAuthenticated, new UserController().UserChangeStatus) //change user status
+router.post("/signup", new UserController().UserCreate); //create new user 
+router.post('/signin', new UserController().UserAuth) //make login
 
 // ROTA CATEGORY
-router.get("/category", isAuthenticated, new ListCategory_CONTROLLER().handle) //list all categories
-router.post("/category", isAuthenticated, (new CreateCategory_CONTROLLER).handle) //create category
+router.get("/categories", isAuthenticated, new CategoryController().Categories) //get all categories
+router.post("/category", isAuthenticated, new CategoryController().CategoryCreate) //create category
 
 // ROTA TASK
-router.get("/task", isAuthenticated, new ListTask_CONTROLLER().handle) //list all the task
-router.post("/task", isAuthenticated, new CreateTask_CONTROLLER().handle) //create a new task
-router.get("/task/detail", isAuthenticated, new ListTaskSpecific_CONTROLLER().handle) //list a specific task
-router.put("/task/finish-unfinish", isAuthenticated, new FinishTask_CONTROLLER().handle) //create a new task
-router.get("/category/task", isAuthenticated, new ListTaskByCategories_CONTROLLER().handle) //list all the task of a specific category
+router.get("/task", isAuthenticated, new TaskController().Task) //get a specific task
+router.get("/tasks", isAuthenticated, new TaskController().Tasks) //get all the task
+router.post("/task", isAuthenticated, new TaskController().TaskCreate) //create a new task
+router.put("/task/status", isAuthenticated, new TaskController().TaskChangeStatus) //create a new task
+router.get("/task/category", isAuthenticated, new TaskController().TasksByCategory) //get all the task of a specific category
 
 // ROTA COMMENT
-router.put("/comment", isAuthenticated, new EditComment_CONTROLLER().handle) //create a comment inside database
-router.get("/comment", isAuthenticated, new GetComment_CONTROLLER().handle) //get a user comment inside database
-router.post("/comment", isAuthenticated, new CreateComment_CONTROLLER().handle) //create a comment inside database
-router.delete("/comment", isAuthenticated, new DeleteComment_CONTROLLER().handle) //delete a comment inside database
-router.get("/comment/specific", isAuthenticated, new GetSpecificComment_CONTROLLER().handle) //get a specific comment inside database
+router.get("/comment", isAuthenticated, new CommentController().Comment) //get a specific comment inside database
+router.get("/comments", isAuthenticated, new CommentController().Comments) //get all comments inside database
+router.put("/comment", isAuthenticated, new CommentController().CommentEdit) //create a comment inside database
+router.post("/comment", isAuthenticated, new CommentController().CommentCreate) //create a comment inside database
+router.delete("/comment", isAuthenticated, new CommentController().CommentDelete) //delete a comment inside database
 
 // ROTA CUSTOMER
-router.get("/customer", isAuthenticated, new ListCustomer_CONTROLLER().handle) //get all user inside database
-router.post("/customer", isAuthenticated, new CreateCustomer_CONTROLLER().handle) //create a customer inside database
+router.get("/customers", isAuthenticated, new CustomerController().Customers) //get all customers inside database
+router.post("/customer", isAuthenticated, new CustomerController().CustomerCreate) //create a customer inside database
 
 // ROTA BRANCH
-router.get("/branch", isAuthenticated, new ListAllBranches_CONTROLLER().handle) //list all branches
+router.get("/branches", isAuthenticated, new BranchesController().Branches) //get all branches
 
 export { router }; //to be visible on server.ts

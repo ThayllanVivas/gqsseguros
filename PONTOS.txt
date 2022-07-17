@@ -5,7 +5,11 @@ compativel com a modalidade escolhida
 - [FEITO] Enquanto usuário não preencher todos os campos necessários, fazer com que o botão CRIAR fique em verde apagado (disabled)
 - [FEITO] IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
 - [FEITO] Alterar código para que os comentários da tarefa sejam retornados e não os comentários do usuário
-- Adicionar rodapé com informações de quem é o usuário, qual perfil é o dele, etc
+- [FEITO] [DESFEITO por não haver necessidade] Adicionar rodapé com informações de quem é o usuário, qual perfil é o dele, etc
+- Adicionar campo para pesquisar tarefas a partir do header com o nome do cliente e/ou nome do carro
+- Opção de que ao clicar em TAREFAS CONCLUÍDAS ou TAREFAS AGUARDANDO CONCLUSÃO e filtrar pelas mesmas somente
+- Listar usuários e seus status na aba NOVO USUÁRIO
+- Adicionar opção de cancelar o acesso de um usuário ao sistema
 
 
 --- ADMIN_MODE ---

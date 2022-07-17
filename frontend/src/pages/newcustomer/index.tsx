@@ -7,7 +7,6 @@ import { Header } from "../../components/header";
 import { useState } from 'react'
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
-import { Footer } from "../../components/footer";
 
 // -- START OF THE COMPONENT -- //
 export default function customer() {
@@ -21,6 +20,8 @@ export default function customer() {
         setCustomerCPF('')
         setCustomerName('')
         setCustomerPhoneNumber('')
+
+        toast.success('Campos foram limpos')
     }
 
     // function to CREATE the user and INSERT on database
@@ -102,7 +103,7 @@ export default function customer() {
                         <button className={Styles.buttonAdd} type="submit" onClick={ () => handleCreateCustomer(event) }>
                             Cadastrar novo cliente
                         </button>
-                        <button className={Styles.buttonClean} type="submit" onClick={ () => handleCleanForm(event)}>
+                        <button className={customerCPF.length > 0 || customerName.length > 0 || customerPhoneNumber.length > 0 ? Styles.buttonClean : Styles.buttonCleanDISABLED} type="submit" onClick={ () => handleCleanForm(event)}>
                             Limpar campos
                         </button>
                     </div>

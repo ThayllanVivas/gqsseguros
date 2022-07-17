@@ -18,14 +18,15 @@ export function Header({activePage}){
 
     const [taskNameSearch, setTaskNameSearch] = useState('')
 
+    // to get USER info
     useEffect(() => {
-        async function userInfo(){
+        async function toGetUserInfo(){
             const response = await api.get('/me')
 
-            setUserInfo(response.data.user)
+            setUserInfo(response.data)
         }
 
-        userInfo()
+        toGetUserInfo()
     }, [])
 
     return (
