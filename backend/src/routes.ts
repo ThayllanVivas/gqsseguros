@@ -3,24 +3,24 @@ import isAuthenticated from './middlewares/isAuthenticated';
 import { Router } from 'express';
 
 import { UserController } from './controllers/UserController';
-import { CategoryController } from './controllers/CategoryController';
 import { TaskController } from './controllers/TaskController';
-import { CommentController } from './controllers/CommentController';
+import { CommentController } from './controllers/CommentController'
+import { CategoryController } from './controllers/CategoryController';
 import { CustomerController } from './controllers/CustommerController';
 import { BranchesController } from './controllers/BranchesController';
 
 const router = Router(); //to copy what is inside Router() into router const
 
 // ROTA USER 
+router.post("/signup", new UserController().UserCreate); //create new user 
+router.post('/signin', new UserController().UserAuth) //make login
 router.get("/me", isAuthenticated, new UserController().User); //access my profile
 router.get("/users", isAuthenticated, new UserController().Users); //get all users
 router.put('/user/status', isAuthenticated, new UserController().UserChangeStatus) //change user status
-router.post("/signup", new UserController().UserCreate); //create new user 
-router.post('/signin', new UserController().UserAuth) //make login
 
 // ROTA CATEGORY
-router.get("/categories", isAuthenticated, new CategoryController().Categories) //get all categories
 router.post("/category", isAuthenticated, new CategoryController().CategoryCreate) //create category
+router.get("/categories", isAuthenticated, new CategoryController().Categories) //get all categories
 
 // ROTA TASK
 router.get("/task", isAuthenticated, new TaskController().Task) //get a specific task
@@ -31,9 +31,9 @@ router.get("/task/category", isAuthenticated, new TaskController().TasksByCatego
 
 // ROTA COMMENT
 router.get("/comment", isAuthenticated, new CommentController().Comment) //get a specific comment inside database
-router.get("/comments", isAuthenticated, new CommentController().Comments) //get all comments inside database
 router.put("/comment", isAuthenticated, new CommentController().CommentEdit) //create a comment inside database
 router.post("/comment", isAuthenticated, new CommentController().CommentCreate) //create a comment inside database
+router.get("/comments", isAuthenticated, new CommentController().Comments) //get all comments inside database
 router.delete("/comment", isAuthenticated, new CommentController().CommentDelete) //delete a comment inside database
 
 // ROTA CUSTOMER

@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken';
 
 class UserController {
 
-    //access my profile
+    //access profile
     async User(req: Request, res: Response, next: NextFunction){
 
         const user_id = req.user_id;
