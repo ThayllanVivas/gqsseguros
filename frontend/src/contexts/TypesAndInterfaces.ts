@@ -12,8 +12,7 @@ export interface DashboardProps {
 export interface DashboardBodyProps {
     taskList: TaskTypes[],
     customerList: CustomerTypes[],
-    categoryList: CategoryTypes[],
-    tasksDates: string[]
+    categoryList: CategoryTypes[]
 }
 export interface DashboardTaskBodyProps {
     date: string,
@@ -39,7 +38,7 @@ export interface SetTaskProps {
 // export TYPE section
 export type TaskTypes = {
     id: string,
-    status: string,
+    status: boolean,
     description: string,
 
     vehicleName: string,

@@ -1,6 +1,5 @@
 // -- IMPORTs AREA -- //
 import Styles from './dashboard.module.scss'
-import DashboardTaskBody from './dashboardTaskBody'
 import { toast } from 'react-toastify'
 import { FiRefreshCcw } from "react-icons/fi"
 import { setupAPIClient } from '../../services/api'
@@ -9,23 +8,23 @@ import { useEffect, useState } from 'react'
 import { DashboardBodyProps, TaskTypes } from '../../contexts/TypesAndInterfaces'
 
 // -- COMPONENT AREA -- //
-export function Body({taskList, customerList, categoryList, tasksDates}: DashboardBodyProps){
+export function Body({taskList, customerList, categoryList}: DashboardBodyProps){
     // -- USESTATE AREA -- //
-    const [tasks, set_tasks] = useState<TaskTypes[]>(taskList) //KEEP IT ON THIS COMPONENT
-    const [tasksStatusTrueQuantity, setTasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
-    const [tasksStatusFalseQuantity, setTasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
-    const [customers, setCustomers] = useState(customerList) //KEEP IT ON THIS COMPONENT
+    var [tasks, set_Tasks] = useState<TaskTypes[]>(taskList) //KEEP IT ON THIS COMPONENT
+    var [tasksDates, set_TaskDates] = useState<string[]>([])
+    var [tasksStatusTrueQuantity, set_TasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
+    var [tasksStatusFalseQuantity, set_TasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
 
-    const [modalView, setModalView] = useState(false) //KEEP IT ON THIS COMPONENT
-    const [modalTask, setModalTask] = useState<TaskTypes>() //KEEP IT ON THIS COMPONENT
-    const [modalTaskID, setModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
-    const [modalComments, setModalComments] = useState([]) //KEEP IT ON THIS COMPONENT
+    var [customers, set_Customers] = useState(customerList) //KEEP IT ON THIS COMPONENT
 
-    const [tasksTOTAL, setTasksTOTAL] = useState<boolean>(false)
+    var [modalView, set_ModalView] = useState(false) //KEEP IT ON THIS COMPONENT
+    var [modalTask, set_ModalTask] = useState<TaskTypes>() //KEEP IT ON THIS COMPONENT
+    var [modalTaskID, set_ModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
+    var [modalComments, set_ModalComments] = useState([]) //KEEP IT ON THIS COMPONENT
 
     const api = setupAPIClient()
 
-    // effect to change status of the tasks
+    // effect to change quantity of tasks's status
     useEffect(() => {
         async function toUpdateTasksStatus(){
             const response  = await api.get("/tasks")
@@ -42,21 +41,25 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
                 }
             })
             
-            setTasksStatusTrueQuantity(statusTRUE)
-            setTasksStatusFalseQuantity(statusFALSE)
+            set_TasksStatusTrueQuantity(statusTRUE)
+            set_TasksStatusFalseQuantity(statusFALSE)
         }
 
         toUpdateTasksStatus()
     }, [tasks])
+    // to change tasks date
+    useEffect(() => {
+        func_toGetDateOfTime()
+    }, [tasks])
     // -> function to INSERT data inside of the modal variable
     async function func_updateTask(){
         const response  = await api.get("/tasks")
-        set_tasks(response.data)
+        set_Tasks(response.data)
     }
     // -> function to INSERT data inside of the customer variable
     async function func_updateCustomer(){
         const response = await api.get("/customers")
-        setCustomers(response.data)
+        set_Customers(response.data)
     }
     // -> function to INSERT data inside of the modal variable
     async function func_updateComments(){
@@ -80,7 +83,7 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
 
         if(response.data.status){
             toast.success('Tarefa concluída!')
-            setModalView(false)
+            set_ModalView(false)
         } else {
             toast.warning('Status de conclusão desfeito!')
         }
@@ -100,15 +103,15 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
             }
         })
 
-        setModalTask(taskFilteredForModal) //set modal task
-        setModalTaskID(TASK_ID) //set ID of modal task
-        setModalComments(commentsFilteredForModal) //set modal comments
+        set_ModalTask(taskFilteredForModal) //set modal task
+        set_ModalTaskID(TASK_ID) //set ID of modal task
+        set_ModalComments(commentsFilteredForModal) //set modal comments
     }
     // -> function to OPEN / CLOSE modal
     async function func_toogleOpenCloseModalView(TASK_ID?: string){
         // await func_updateButton()
         await func_updateModalData(TASK_ID)
-        setModalView(!modalView)
+        set_ModalView(!modalView)
     }
     // -> function to ADD a coment on database
     async function func_handleAddComment(comment: string){
@@ -142,6 +145,49 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
 
         await func_updateModalData(modalTaskID) //call function to update modal data
     }
+    async function func_toogleFilterTasks(status: boolean){
+        await func_updateTask()
+        let data = new Array
+        data.push(taskList.filter((task) => task.status === status))
+
+        set_Tasks(data[0])
+        await func_toGetDateOfTime()
+        // console.log('data:', data)
+
+    }
+    // to get dates of tasks updated
+    async function func_toGetDateOfTime(){
+        let dates = [] //var aux
+
+        //transformando a data em object e inserindo dentro da variavel DATES
+        tasks.map((task: any) => {
+            let timeSlamp = new Date(task.created_at) 
+            dates.push(timeSlamp) 
+        })
+
+        // organizando as datas por ordem cronológica
+        dates.sort((a,b) => {
+            if (a > b) return 1
+            if (b > a) return -1
+            return 0
+        })
+
+        let datesToString = [] //aux
+
+        //trasnformando as datas organizadas em string
+        dates.map((date) => {
+            datesToString.push(date.toLocaleDateString())
+        })
+
+        //filtering dates to avoid duplicates dates
+        const filteredArray = datesToString.filter((ele, pos) => {
+            return datesToString.indexOf(ele) == pos
+        })
+        
+
+        set_TaskDates(filteredArray)
+    }
+
 
     return (
         <>            
@@ -150,13 +196,13 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
 
                         <article id={Styles.taskSection}>
                                 <section id={Styles.tasksStatusSection}>
-                                    <button id={Styles.statusTOTAL}>
+                                    <button id={Styles.statusTOTAL} onClick={async () => await func_updateButton()}>
                                         <p> Tarefas no total: {tasksStatusTrueQuantity + tasksStatusFalseQuantity} </p>
                                     </button>
-                                    <button id={Styles.statusTRUE}>
+                                    <button id={Styles.statusTRUE} onClick={async () => await func_toogleFilterTasks(true)}>
                                         <p> Tarefas concluídas: {tasksStatusTrueQuantity} </p>
                                     </button>
-                                    <button id={Styles.statusFALSE}>
+                                    <button id={Styles.statusFALSE} onClick={async () => await func_toogleFilterTasks(false)}>
                                         <p> Tarefas aguardando conclusão: {tasksStatusFalseQuantity} </p>
                                     </button>
                                     <button id={Styles.refreshButton} onClick={() => func_updateButton()}>
@@ -164,7 +210,7 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
                                     </button>
                                 </section>
 
-                                {tasksDates.map((date: any, index) => {
+                                {tasksDates.map((date: string, index) => {
                                     return (
                                         <>
                                             <div className={Styles.taskContainer}>                  
@@ -174,14 +220,33 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
                                                     </p>
                                                 </div>
                                                 <div className={Styles.taskInfoContainer}>
-                                                    <DashboardTaskBody  
-                                                        key={index}
-                                                        date={date} 
-                                                        tasks={tasks} 
-                                                        customers={customers} 
-                                                        handleOpenModalView={func_toogleOpenCloseModalView} 
-                                                        categoryList={categoryList}
-                                                    />
+                                                    {tasks.map((task: TaskTypes, index) => {
+                                                        let customer = customers.find(customer => customer.id == task.customer_id)
+                                                
+                                                        let timeSlamp = new Date(task.created_at)
+                                                        let localeDateString = timeSlamp.toLocaleDateString()
+                                                        let dateTimeCustomer = localeDateString
+                                                
+                                                        if(dateTimeCustomer === date){
+                                                            return (
+                                                                <>
+                                                                    <section key={index} className={Styles.taskList}>
+                                                                        <button className={Styles.taskItem} onClick={() => func_toogleOpenCloseModalView(task.id)} >
+                                                                            {task.status ? (
+                                                                                <div className={Styles.activeClass}></div> ): (
+                                                                                <div className={Styles.notActiveClass}></div> 
+                                                                            )}
+                                                                            <div className={Styles.taskItemDetails}>
+                                                                                <span className={Styles.customerName}>{customer.name}<p className={Styles.branch_name}>({categoryList[Number(task.category_id)-1].name})</p></span>
+                                                                                <span className={Styles.slash}></span>
+                                                                                <span className={Styles.vehicleName}>{task.vehicleName.toUpperCase()}</span>
+                                                                            </div>
+                                                                        </button>
+                                                                    </section>
+                                                                </>
+                                                            )
+                                                        }
+                                                    })}
                                                 </div>
                                             </div>
                                         </>
