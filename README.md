@@ -4,14 +4,14 @@ This project is a websystem for GQS Seguros company
 Principais tecnologias utilizadas:
 
 BACKEND: 
-    | Node
+    Node
     | ExpressJS
     | Prisma Client
     | PostegreSQL
     | Typescript
 
 FRONTEND:
-    | JavaScript
+    JavaScript
     | NextJS
     | Axios
     | Sass
