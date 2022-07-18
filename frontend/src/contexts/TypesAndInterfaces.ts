@@ -12,7 +12,8 @@ export interface DashboardProps {
 export interface DashboardBodyProps {
     taskList: TaskTypes[],
     customerList: CustomerTypes[],
-    categoryList: CategoryTypes[]
+    categoryList: CategoryTypes[],
+    tasksDates: string[]
 }
 export interface DashboardTaskBodyProps {
     date: string,

@@ -1,36 +1,18 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import logoImg from '../../../public/logo.png';
 import STYLES from './signup.module.scss';
-import { Input } from '../../components/ui/input/index';
-import { Button } from '../../components/ui/button';
-import { FormEvent, useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
-import { toast } from 'react-toastify';
-import { Header } from '../../components/header';
+import logoImg from '../../../public/logo.png';
 import { api } from '../../services/apiClient';
-import { setupAPIClient } from '../../services/api';
+import { Input } from '../../components/ui/input/index';
+import { toast } from 'react-toastify';
+import { Button } from '../../components/ui/button';
+import { Header } from '../../components/header';
 import { canSSRAuth } from '../../utils/canSSRAuth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { FiRefreshCcw } from 'react-icons/fi';
-
-
-interface SignUpProps {
-  usersList: UsersType[]
-}
-
-type UsersType = {
-  id: string,
-  name: string,
-  email: string,
-  admin_mode: boolean,
-  status: boolean
-}
-
-type ChangeUserStatusType = {
-  id: string,
-  status: boolean
-}
-
+import { setupAPIClient } from '../../services/api';
+import { FormEvent, useContext, useState } from 'react';
+import { ChangeUserStatusType, SignUpProps } from '../../contexts/TypesAndInterfaces';
 
 export default function SignUp({usersList}: SignUpProps) {
 
@@ -39,19 +21,22 @@ export default function SignUp({usersList}: SignUpProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [password, setPassword] = useState('')
   const [users, setUsers] = useState(usersList)
-
   const {signUp} = useContext(AuthContext)
 
+  // to update users
   async function func_updateButton(){
     await toGetUsers()
     toast.success('Usuários atualizados')
   }
 
+  // to get users updated (only NO admins are insert inside the state)
   async function toGetUsers(){
     const response = await api.get('/users')
+
     setUsers(response.data)
   }
 
+  // to create a new user
   async function handleSignUp(event: FormEvent){  
     event.preventDefault();
 
@@ -76,13 +61,13 @@ export default function SignUp({usersList}: SignUpProps) {
     toGetUsers() // to upate users variable
   }
 
+  //to change the user status
   async function hanleChangeUserStatus(user: ChangeUserStatusType) {
-    const response = await api.put('/user/status', {
+    await api.put('/user/status', {
       id: user.id,
       status: user.status
     })
 
-    // console.log(response.data)
     await toGetUsers() //to update USERS
   }
 

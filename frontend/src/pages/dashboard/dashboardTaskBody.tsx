@@ -1,15 +1,7 @@
-import { CategoryTypes, CustomerTypes, TaskTypes } from "./index"
 import Styles from './dashboard.module.scss'
+import { DashboardTaskBodyProps } from '../../contexts/TypesAndInterfaces'
 
-interface TaskProps {
-    date: string,
-    tasks: TaskTypes[],
-    customers: CustomerTypes[],
-    handleOpenModalView: (task_id: string) => void,
-    categoryList: CategoryTypes[]
-}
-
-export default function DashboardTaskBody({date, tasks, customers, handleOpenModalView, categoryList}: TaskProps) {
+export default function DashboardTaskBody({date, tasks, customers, handleOpenModalView, categoryList}: DashboardTaskBodyProps) {
     
     return(
         <>            

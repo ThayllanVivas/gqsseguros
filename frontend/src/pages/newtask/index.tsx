@@ -5,36 +5,13 @@ import Styles from './newtask.module.scss'
 import { toast } from "react-toastify";
 import { Header } from "../../components/header";
 import { canSSRAuth } from "../../utils/canSSRAuth";
+import { NewTaskProps } from "../../contexts/TypesAndInterfaces";
 import { setupAPIClient } from "../../services/api";
 import { useState, FormEvent, useEffect } from 'react'
 
 
-// -- START OF INTERFACES AND TYPES -- //
-interface ListKind {
-    branchList: ItemBranchTypes[];
-    categoryList: ItemCategoryTypes[];
-    customerList: ItemConsumerTypes[];
-}
-
-type ItemConsumerTypes = {
-    id: string;
-    cpf: string;
-    name: string;
-    phoneNumber: string;
-}
-
-type ItemCategoryTypes = {
-    id: string;
-    name: string;
-}
-
-type ItemBranchTypes = {
-    id: string;
-    name: string;
-}
-
 // -- START OF THE COMPONENT -- //
-export default function product({categoryList, branchList, customerList}: ListKind) {
+export default function NewTask({categoryList, branchList, customerList}: NewTaskProps) {
     const api = setupAPIClient()
 
     const [branches, setBranches] = useState(branchList)
@@ -77,17 +54,14 @@ export default function product({categoryList, branchList, customerList}: ListKi
     function handleChangeCategory(event){
         setCategorySelected(event.target.value)
     }
-
     // function to DEFINE the branch
     function handleChangeBranch(event){
         setBranchSelected(event.target.value)
     }
-
     // function to DEFINE the constumer
     function handleChangeConsumer(event){
         setCustomerSelected(event.target.value)
     }
-
     // function to CREATE the task
     async function handleCreateTask(event: FormEvent){
         event.preventDefault()

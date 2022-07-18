@@ -10,7 +10,8 @@
     // border-bottom: 1px solid var(--gray-100);
 
     #logoNav {
-        min-width: 50%;
+        margin-left: 5rem;
+        min-width: 30%;
         // background-color: brown;
         display: flex;
         align-items: center;
@@ -41,7 +42,11 @@
     }   
 
     #menuNav {
+        margin-right: 5rem;
+        min-width: 65%;
+        // background-color: rgb(30, 221, 132);
         display: flex;
+        justify-content: right;
         align-items: center;
         font-weight: bold;
     
@@ -59,32 +64,32 @@
     
             &:hover {
                 color: var(--dark-900);
-                background-color: var(--main-button);
-                border: 1px solid var(--main-button);
+                background-color: var(--main);
+                border: 1px solid var(--main);
             }  
         }
 
         .customerPageActive {
             color: var(--dark-900);
-            background-color: var(--main-button);
-            border: 1px solid var(--main-button);
+            background-color: var(--main);
+            border: 1px solid var(--main);
         }
         
         .taskPageActive {
             color: var(--dark-900);
-            background-color: var(--main-button);
-            border: 1px solid var(--main-button);
+            background-color: var(--main);
+            border: 1px solid var(--main);
         }
     
         .signUpPageActive {
             color: var(--dark-900);
-            background-color: var(--main-button);
-            border: 1px solid var(--main-button);
+            background-color: var(--main);
+            border: 1px solid var(--main);
         }
         .dashboardPageActive {
             color: var(--dark-900);
-            background-color: var(--main-button);
-            border: 1px solid var(--main-button);
+            background-color: var(--main);
+            border: 1px solid var(--main);
         }
     
         button {

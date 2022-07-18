@@ -40,7 +40,7 @@ class UserController {
             throw new Error('Only admin users can have access to this list')
         }
 
-        const usersList = await prismaClient.user.findMany({
+        const response = await prismaClient.user.findMany({
             select: {
                 id: true,
                 name: true,
@@ -49,6 +49,8 @@ class UserController {
                 status: true
             }
         })
+
+        const usersList = response.filter((user) => !user.admin_mode)
         
         return res.json(usersList)
     }
@@ -57,9 +59,6 @@ class UserController {
     async UserChangeStatus(req: Request, res: Response, next: NextFunction){
 
         const { id, status } = req.body
-
-        console.log('id', id)
-        console.log('status', typeof status)
 
         const response = await prismaClient.user.update({
             where: {

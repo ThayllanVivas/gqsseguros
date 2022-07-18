@@ -35,13 +35,13 @@ export function Header({activePage}){
                 <Link href="/dashboard">
                     <img id={Styles.logo} src="./logo.png" width={40} height={46}/>
                 </Link>
-                <input 
+                {/* <input 
                     type="text"
                     placeholder="Pesquisar tarefa..."
                     id={Styles.logoInput}
                     value={taskNameSearch}
                     onChange={(e) => setTaskNameSearch(e.target.value)}
-                />
+                /> */}
             </div>
             <nav id={Styles.menuNav}>
                 <Link href="/dashboard">

@@ -2,14 +2,16 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    width: 1300px;
+    width: 100%;
     display: flex;
     margin: 0 auto;
+    // background-color: orange;
 
     // USERS LIST SECTION
     #userContainer {
         width: 49%;
-        // height: 80vh;
+        // background-color: antiquewhite;
+        height: 100vh;
         overflow-x: none;
         display: flex;
         align-items: center;
@@ -93,11 +95,13 @@
     #divisory {
         width: 0.2%;
         background-color: var(--dark-700);
+        // background-color: antiquewhite;
     }
     
     // SIGNUP SECTION
     #signUpContainer {
         width: 49%;
+        // background-color: antiquewhite;
         // height: 80vh;
         display: flex;
         justify-content: center;

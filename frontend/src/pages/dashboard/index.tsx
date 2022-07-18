@@ -5,57 +5,12 @@ import { Body } from './dashboardBody'
 import { Header } from "../../components/header"
 import { canSSRAuth } from "../../utils/canSSRAuth"
 import { setupAPIClient } from "../../services/api"
-
-// -- START OF INTERFACES AND TYPES -- //
-interface DashboardProps {
-    taskList: TaskTypes[],
-    customerList: CustomerTypes[],
-    categoryList: CategoryTypes[]
-}
-
-export type CustomerTypes = {
-    id: string,
-    cpf: string,
-    name: string,
-    phoneNumber: string
-}
-
-export type CommentTypes = {
-    id: string,
-    text: string,
-    task_id: string,
-    created_at: string
-}
-
-export type CategoryTypes = {
-    id: string,
-    name: string
-}
-
-export type TaskTypes = {
-    id: string,
-    status: string,
-    description: string,
-
-    vehicleName: string,
-    vehiclePrice: string,
-    vehicleYear: string,
-
-    user_id: string,
-    branch_id: string,
-    category_id: string,
-    customer_id: string,
-    created_at: string
-}
-
-export type TaskDateType = {
-    created_at: string
-}
+import { DashboardProps } from '../../contexts/TypesAndInterfaces'
 
 // -- START OF THE COMPONENT -- //
 export default function Dashboard({taskList, customerList, categoryList}: DashboardProps){
 
-    const [tasksDates, setTaskDates] = useState<TaskDateType[]>([])
+    const [tasksDates, setTaskDates] = useState<string[]>([])
 
     useEffect(() => {
         function toGetDateOfTime(){
@@ -101,7 +56,7 @@ export default function Dashboard({taskList, customerList, categoryList}: Dashbo
                 taskList={taskList} 
                 customerList={customerList}
                 categoryList={categoryList}
-                taskDates={tasksDates}
+                tasksDates={tasksDates}
             />
 
             {/* <Footer /> */}
