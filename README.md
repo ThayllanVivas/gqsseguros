@@ -1,7 +1,7 @@
 # gqsseguros
 This project is a websystem for GQS Seguros company
 
-Principais tecnologias utilizadas:
+Mainly technologies used:
 
 BACKEND: 
     Node
