@@ -22,3 +22,12 @@ Passo a passo:
 	2.1 - necessário pegar o ID do usuário para, com código, verificar no banco de dados o modo do usuário
 [FEITO] 3 - se for admin, banco de dados retorno todos os dados disponíveis até então para o dashboard do admin
 	3.1 - IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
+
+// in axios.d.ts
+import 'axios';
+
+declare module 'axios' {   
+    export interface AxiosRequestConfig {
+        status?: string;   
+    } 
+}

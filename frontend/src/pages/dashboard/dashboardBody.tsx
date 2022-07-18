@@ -21,6 +21,8 @@ export function Body({taskList, customerList, categoryList, tasksDates}: Dashboa
     const [modalTaskID, setModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
     const [modalComments, setModalComments] = useState([]) //KEEP IT ON THIS COMPONENT
 
+    const [tasksTOTAL, setTasksTOTAL] = useState<boolean>(false)
+
     const api = setupAPIClient()
 
     // effect to change status of the tasks
