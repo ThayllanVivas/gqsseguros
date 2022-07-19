@@ -82,6 +82,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         set_FalseTasksActive(false)
         await func_updateTasks()
         await func_updateCustomers()
+        toast.success('Dashboard atualizado')
     }
 
     async function func_updateCustomers(){

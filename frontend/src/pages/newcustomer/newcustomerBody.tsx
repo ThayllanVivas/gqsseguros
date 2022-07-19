@@ -3,7 +3,7 @@ import STYLES from './customer.module.scss'
 import { toast } from "react-toastify";
 import { useState } from 'react';
 import { setupAPIClient } from "../../services/api";
-import { CustomerTypes, NewCustomerProps } from '../../contexts/TypesAndInterfaces';
+import { CustomerType, NewCustomerProps } from '../../contexts/TypesAndInterfaces';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { FiRefreshCcw } from 'react-icons/fi';
@@ -11,7 +11,7 @@ import { api } from '../../services/apiClient';
 
 // -- START OF THE COMPONENT -- //
 export function Body({customersFSSP}: NewCustomerProps) {
-    const [customers, set_Customers] = useState<CustomerTypes[]>(customersFSSP)
+    const [customers, set_Customers] = useState<CustomerType[]>(customersFSSP)
     const [customerCPF, setCustomerCPF] = useState('')
     const [customerName, setCustomerName] = useState('')
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState('')
@@ -89,13 +89,13 @@ export function Body({customersFSSP}: NewCustomerProps) {
 
                     <Input 
                         placeholder="Insira um CPF"
-                        type="text"
+                        type="number"
                         value={customerCPF}
                         onChange={ (e) => setCustomerCPF(e.target.value) }
                     />
                     <Input 
                         placeholder="Insira um número de contato"
-                        type="password"
+                        type="number"
                         value={customerPhoneNumber}
                         onChange={ (e) => setCustomerPhoneNumber(e.target.value) }
                     />

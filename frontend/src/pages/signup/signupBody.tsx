@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import STYLES from './signup.module.scss';
 import { api } from '../../services/apiClient';
 import { Input } from '../../components/ui/input/index';
@@ -6,28 +5,26 @@ import { toast } from 'react-toastify';
 import { Button } from '../../components/ui/button';
 import { FiRefreshCcw } from 'react-icons/fi';
 import { FormEvent, useState } from 'react';
-import { ChangeUserStatusType, SignUpProps, SignUpTypes } from '../../contexts/TypesAndInterfaces';
+import { ChangeUserStatusType, SignUpProps } from '../../contexts/TypesAndInterfaces';
 
-export function Body({usersFSSP}: SignUpProps) {
+export function Body({notAdminUsersFSSP}: SignUpProps) {
 
     const [name, setName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
+    const [notAdminUsers, set_notAdminUsers] = useState(notAdminUsersFSSP)
     const [loading, setLoading] = useState<boolean>(false)
     const [password, setPassword] = useState<string>('')
-    const [users, setUsers] = useState(usersFSSP)
 
     // to update users
     async function func_updateButton(): Promise<void>{
-        await toGetUsers()
+      await func_toGetUsersUpdated()
         toast.success('Usuários atualizados')
     }
 
-    // to get users updated (only NO admins are insert inside the state)
-    async function toGetUsers(){
+    async function func_toGetUsersUpdated(){
         const response = await api.get('/users')
-        const filterUsers = response.data.filter((user) => user.admin_mode !== true)
-
-        setUsers(filterUsers)
+        const usersFiltered = response.data.filter((user) => user.admin_mode !== true)
+        set_notAdminUsers(usersFiltered)
     }
 
     // to create a new user
@@ -61,7 +58,7 @@ export function Body({usersFSSP}: SignUpProps) {
 
         setLoading(false)
 
-        toGetUsers() // to upate users variable
+        func_toGetUsersUpdated() // to upate users variable
     }
 
     async function hanleChangeUserStatus(user: ChangeUserStatusType) {
@@ -70,7 +67,7 @@ export function Body({usersFSSP}: SignUpProps) {
         status: user.status
         })
 
-        await toGetUsers() //to update USERS
+        await func_toGetUsersUpdated() //to update USERS
     }
   
     function handleCleanForm(event){
@@ -143,7 +140,7 @@ export function Body({usersFSSP}: SignUpProps) {
           
           <ul className={STYLES.userList}>
 
-            {users.map((user, index) => {
+            {notAdminUsers.map((user, index) => {
               return(
                 <>
                   <li key={user.id}> 

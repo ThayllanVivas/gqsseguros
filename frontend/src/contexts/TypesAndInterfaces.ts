@@ -25,7 +25,7 @@ export interface NewTaskProps {
     customersFSSP: CustomerType[];
 }
 export interface SignUpProps {
-    usersFSSP: UserType[]
+    notAdminUsersFSSP: UserType[];
 }
 export interface SetTaskProps {
     searchInfo: string,
