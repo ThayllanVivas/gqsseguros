@@ -1,11 +1,12 @@
 // -- IMPORTs AREA -- //
 import STYLES from './dashboard.module.scss'
+import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 import { FiRefreshCcw } from "react-icons/fi"
 import { ModalComponent } from '../../components/modal'
 import { useEffect, useState } from 'react'
 import { CommentTypes, CustomerType, DashboardProps, TaskType, UserType } from '../../contexts/TypesAndInterfaces'
-import { api } from '../../services/apiClient'
+
 
 // -- COMPONENT AREA -- //
 export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps){

@@ -1,5 +1,5 @@
 import STYLES from './signup.module.scss';
-import { api } from '../../services/apiClient';
+import { api } from '../../services/api'
 import { Input } from '../../components/ui/input/index';
 import { toast } from 'react-toastify';
 import { Button } from '../../components/ui/button';
@@ -101,7 +101,7 @@ export function Body({notAdminUsersFSSP}: SignUpProps) {
                   placeholder="Ex: joaoalves@example.com"
                   type="text"
                   value={email}
-                  onChange={ (e) => setEmail(e.target.value) }
+                  onChange={ (e) => setEmail(e.target.value.toLowerCase()) }
               />
               <Input 
                   placeholder="*********"

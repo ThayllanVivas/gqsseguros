@@ -1,13 +1,12 @@
 // -- START OF IMPORTS -- //
 import Router from "next/router";
-import Styles from './newtask.module.scss'
+import Styles from './newtask.module.scss';
+import { api } from '../../services/api';
 import { toast } from "react-toastify";
 import { NewTaskProps } from "../../contexts/TypesAndInterfaces";
-import { setupAPIClient } from "../../services/api";
 import { useState, FormEvent, useEffect } from 'react'
 
 export function Body({categoriesFSSP, branchesFSSP, customersFSSP}: NewTaskProps){
-    const api = setupAPIClient()
 
     const [branches, setBranches] = useState(branchesFSSP)
     const [categories, setCategories] = useState(categoriesFSSP)

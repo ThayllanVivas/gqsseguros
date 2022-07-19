@@ -1,13 +1,12 @@
 // -- START OF IMPORTS -- //
 import STYLES from './customer.module.scss'
+import { api } from '../../services/api'
 import { toast } from "react-toastify";
-import { useState } from 'react';
-import { setupAPIClient } from "../../services/api";
-import { CustomerType, NewCustomerProps } from '../../contexts/TypesAndInterfaces';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import { useState } from 'react';
 import { FiRefreshCcw } from 'react-icons/fi';
-import { api } from '../../services/apiClient';
+import { CustomerType, NewCustomerProps } from '../../contexts/TypesAndInterfaces';
 
 // -- START OF THE COMPONENT -- //
 export function Body({customersFSSP}: NewCustomerProps) {
@@ -46,8 +45,6 @@ export function Body({customersFSSP}: NewCustomerProps) {
             toast.error("Preencha todos os campos")
             return;
         }
-
-        const api = setupAPIClient()
 
         const response = await api.post("/customer", {
             cpf: customerCPF,

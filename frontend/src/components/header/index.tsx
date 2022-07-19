@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Styles from './header.module.scss'
+import { api } from '../../services/api'
 import { FiLogOut} from 'react-icons/fi'
 import { signOut } from '../../contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import { api } from '../../services/apiClient'
 
 type UserInfoType = {
     id: string,
