@@ -48,14 +48,12 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         set_user(response.data)
         
         const responseUsers = await api.get('/users')
-        console.log('usersDash: ', responseUsers.data)
         set_users(responseUsers.data)
     }
 
     async function updateTask(){
         const response  = await api.get("/task")
         let taskFiltered = response.data.find(taskHMM => taskHMM.id === modalTaskID)
-        console.log(taskFiltered)
         set_ModalTask(taskFiltered)
     }
 
@@ -190,8 +188,6 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
 
         set_Tasks2(data[0])
         await func_handleGetDatesOfTasks()
-        // console.log('data:', data)
-
     }
 
     async function func_handleDeleteComment(comment_id: string){    

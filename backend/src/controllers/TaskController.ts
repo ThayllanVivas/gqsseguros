@@ -15,11 +15,19 @@ class TaskController {
                 },
                 select: {
                     id: true,
+                    description: true,
+                    status: true,
+
                     vehiclePrice: true,
                     vehicleName: true,
                     vehicleYear: true,
-                    description: true,
-                    category_id: true
+
+                    branch_id: true,
+                    category_id: true,
+                    user_id: true,
+                    customer_id: true,
+                    
+                    created_at: true
                 }
             }
         )

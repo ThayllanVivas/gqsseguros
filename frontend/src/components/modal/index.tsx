@@ -23,7 +23,6 @@ export function ModalComponent(
   useEffect(() => {
     function toGetTaskResponsable(){
       const userFilter = users.find((user) => user.id == task.user_id)
-      console.log('userFilter: ', userFilter)
       set_taskResponsable(userFilter)
     }
 
