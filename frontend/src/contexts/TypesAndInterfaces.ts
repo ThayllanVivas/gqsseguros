@@ -1,39 +1,49 @@
 // export INTERFACE section
 export interface HeaderProps {
-    customerList?: CustomerTypes[];
-    taskList?: TaskTypes[];
+    customersFSSP?: CustomerTypes[];
+    tasksFSSP?: TaskTypes[];
     activePage: string;
 }
 export interface DashboardProps {
-    taskList: TaskTypes[];
-    customerList: CustomerTypes[];
-    categoryList: CategoryTypes[];
+    tasksFSSP: TaskTypes[];
+    customersFSSP: CustomerTypes[];
+    categoriesFSSP: CategoryTypes[];
 }
-export interface DashboardBodyProps {
-    taskList: TaskTypes[],
-    customerList: CustomerTypes[],
-    categoryList: CategoryTypes[]
+export interface NewCustomerProps {
+    customersFSSP: CustomerTypes[];
 }
 export interface DashboardTaskBodyProps {
     date: string,
     tasks: TaskTypes[],
     customers: CustomerTypes[],
     handleOpenModalView: (task_id: string) => void,
-    categoryList: CategoryTypes[]
+    categoriesFSSP: CategoryTypes[]
 }
 export interface NewTaskProps {
-    branchList: BranchTypes[];
-    categoryList: CategoryTypes[];
-    customerList: CustomerTypes[];
+    branchesFSSP: BranchTypes[];
+    categoriesFSSP: CategoryTypes[];
+    customersFSSP: CustomerTypes[];
 }
 export interface SignUpProps {
-    usersList: UsersType[]
+    usersFSSP: UserType[]
 }
 export interface SetTaskProps {
     searchInfo: string,
-    customerList: CustomerTypes[],
-    taskList: TaskTypes[];
+    customersFSSP: CustomerTypes[],
+    tasksFSSP: TaskTypes[];
 }
+export interface ModalTaskProps{
+    isOpen: boolean;
+    user: UserType;
+    task: TaskTypes;
+    comments: CommentTypes[];
+    customer: CustomerTypes;
+    onRequestUpdateTask: () => void;
+    onRequestClose: () => void;
+    onRequestFinishUnfinish: (task) => Promise<void>;
+    onRequestAddComent: (description: string) => Promise<void>;
+    onRequestDeleteComment: (comment_id: string) => void;
+  }
 
 // export TYPE section
 export type TaskTypes = {
@@ -50,6 +60,11 @@ export type TaskTypes = {
     category_id: string,
     customer_id: string,
     created_at: string
+}
+export type SignUpTypes = {
+    name: string,
+    email: string,
+    password: string
 }
 export type CommentTypes = {
     id: string,
@@ -71,22 +86,16 @@ export type BranchTypes = {
     id: string;
     name: string;
 }
-export type UsersType = {
+export type UserType = {
     id: string,
     name: string,
     email: string,
+    status: boolean,
     admin_mode: boolean,
-    status: boolean
 }
   
 //export extra TYPE section
 export type ChangeUserStatusType = {
     id: string,
     status: boolean
-}
-export type UserInfoType = {
-    id: string,
-    name: string,
-    email: string,
-    admin_mode: boolean
 }

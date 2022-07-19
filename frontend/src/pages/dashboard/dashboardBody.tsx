@@ -1,166 +1,113 @@
 // -- IMPORTs AREA -- //
-import Styles from './dashboard.module.scss'
+import STYLES from './dashboard.module.scss'
 import { toast } from 'react-toastify'
 import { FiRefreshCcw } from "react-icons/fi"
-import { setupAPIClient } from '../../services/api'
 import { ModalComponent } from '../../components/modal'
 import { useEffect, useState } from 'react'
-import { DashboardBodyProps, TaskTypes } from '../../contexts/TypesAndInterfaces'
+import { CommentTypes, CustomerTypes, DashboardProps, TaskTypes, UserType } from '../../contexts/TypesAndInterfaces'
+import { api } from '../../services/apiClient'
 
 // -- COMPONENT AREA -- //
-export function Body({taskList, customerList, categoryList}: DashboardBodyProps){
-    // -- USESTATE AREA -- //
-    var [tasks, set_Tasks] = useState<TaskTypes[]>(taskList) //KEEP IT ON THIS COMPONENT
-    var [tasksDates, set_TaskDates] = useState<string[]>([])
-    var [tasksStatusTrueQuantity, set_TasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
-    var [tasksStatusFalseQuantity, set_TasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
+export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps){
 
-    var [customers, set_Customers] = useState(customerList) //KEEP IT ON THIS COMPONENT
+    // -- USESTATE section -- //
+    const [tasks, set_Tasks] = useState<TaskTypes[]>(tasksFSSP) //KEEP IT ON THIS COMPONENT
+    const [customers, set_Customers] = useState(customersFSSP) //KEEP IT ON THIS COMPONENT
 
-    var [modalView, set_ModalView] = useState(false) //KEEP IT ON THIS COMPONENT
-    var [modalTask, set_ModalTask] = useState<TaskTypes>() //KEEP IT ON THIS COMPONENT
-    var [modalTaskID, set_ModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
-    var [modalComments, set_ModalComments] = useState([]) //KEEP IT ON THIS COMPONENT
+    const [tasks2, set_Tasks2] = useState<TaskTypes[]>(tasks) //KEEP IT ON THIS COMPONENT
+    const [tasksDates, set_TaskDates] = useState<string[]>([])
+    const [tasksStatusTrueQuantity, set_TasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
+    const [tasksStatusFalseQuantity, set_TasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
 
-    const api = setupAPIClient()
+    const [modalView, set_ModalView] = useState(false) //KEEP IT ON THIS COMPONENT
+    const [user, set_user] = useState<UserType>()
+    const [modalTask, set_ModalTask] = useState<TaskTypes>() //KEEP IT ON THIS COMPONENT
+    const [modalTaskID, set_ModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
+    const [modalComments, set_ModalComments] = useState<CommentTypes[]>([]) //KEEP IT ON THIS COMPONENT
+    const [modalCustomer, set_ModalCustomer] = useState<CustomerTypes>() //KEEP IT ON THIS COMPONENT
+    const [trueTasksActive, set_TrueTasksActive] =  useState<boolean>(false)
+    const [falseTasksActive, set_FalseTasksActive] =  useState<boolean>(false)
+    const [totalTasksActive, set_TotalTasksActive] =  useState<boolean>(true)
 
-    // effect to change quantity of tasks's status
+    // to change quantity of task's status and change tasks date
     useEffect(() => {
-        async function toUpdateTasksStatus(){
-            const response  = await api.get("/tasks")
+        func_toUpdateTasksStatus()
+        func_handleGetDatesOfTasks()
+    }, [tasks2])
 
-            let statusTRUE = 0
-            let statusFALSE = 0
-
-            response.data.map((task, index)=> {
-                if(task.status) {
-                    statusTRUE += 1
-                }
-                else {
-                    statusFALSE += 1
-                }
-            })
-            
-            set_TasksStatusTrueQuantity(statusTRUE)
-            set_TasksStatusFalseQuantity(statusFALSE)
-        }
-
-        toUpdateTasksStatus()
-    }, [tasks])
-    // to change tasks date
+    //to get user info
     useEffect(() => {
-        func_toGetDateOfTime()
-    }, [tasks])
-    // -> function to INSERT data inside of the modal variable
-    async function func_updateTask(){
+      isAdmin()
+    }, [])
+
+    // -- FUNCTION section
+    async function isAdmin(){
+        const response = await api.get('/me')
+        set_user(response.data)
+    }
+
+    async function updateTask(){
+        const response  = await api.get("/task")
+        let taskFiltered = response.data.find(taskHMM => taskHMM.id === modalTaskID)
+        console.log(taskFiltered)
+        set_ModalTask(taskFiltered)
+    }
+
+    async function func_updateTasks(){
         const response  = await api.get("/tasks")
         set_Tasks(response.data)
+        set_Tasks2(response.data)
     }
-    // -> function to INSERT data inside of the customer variable
-    async function func_updateCustomer(){
-        const response = await api.get("/customers")
-        set_Customers(response.data)
-    }
-    // -> function to INSERT data inside of the modal variable
-    async function func_updateComments(){
-        const response = await api.get("/comments")
-        return response.data
-    }
-    // -> function to GET all data updated 
-    async function func_updateButton(){
-        toast.success('Dashboard atualizado')
-        await func_updateTask()
-        await func_updateCustomer()
-        await func_updateComments()
-    }
-    // -> function to FINISH or UNFINISH a task
-    async function func_updateTaskStatus(TASK: TaskTypes){
 
-        const response = await api.put("/task/status", {
-            id: TASK.id,
-            status: TASK.status
-        })
-
-        if(response.data.status){
-            toast.success('Tarefa concluída!')
-            set_ModalView(false)
-        } else {
-            toast.warning('Status de conclusão desfeito!')
-        }
-        
-        await func_updateTask()
-    }
-    // -> function to UPDATE data for modal
-    async function func_updateModalData(TASK_ID: string){
-        const response = await func_updateComments() // to update the user comments
-    
-        const taskFilteredForModal = tasks.find((task: any) => task.id === TASK_ID)
+    async function func_updateComments(taskID: string){
         let commentsFilteredForModal = [] //to aux
+        const response = await api.get("/comments")
 
-        response.map((comment: any) => {
-            if(comment.task_id === TASK_ID) {
+        response.data.map((comment: CommentTypes) => {
+            if(comment.task_id === taskID) {
                 commentsFilteredForModal.push(comment)
             }
         })
-
-        set_ModalTask(taskFilteredForModal) //set modal task
-        set_ModalTaskID(TASK_ID) //set ID of modal task
         set_ModalComments(commentsFilteredForModal) //set modal comments
     }
-    // -> function to OPEN / CLOSE modal
-    async function func_toogleOpenCloseModalView(TASK_ID?: string){
-        // await func_updateButton()
-        await func_updateModalData(TASK_ID)
-        set_ModalView(!modalView)
-    }
-    // -> function to ADD a coment on database
-    async function func_handleAddComment(comment: string){
 
-        //verify is the user really types anything
-        if(comment.length == 0){
-          toast.error("Insira algum comentário antes")
-          return
-        }
-    
-        //insert the new comment inside database
-        await api.post('/comment', {
-          text: comment,
-          task_id: modalTaskID
-        })
-    
-        toast.success("Comentário adicionado com sucesso") //show a sucess message to user
-
-        await func_updateModalData(modalTaskID) //call function to update modal data
-        
+    async function func_updateDashboard(){
+        set_TotalTasksActive(true)
+        set_TrueTasksActive(false)
+        set_FalseTasksActive(false)
+        await func_updateTasks()
+        await func_updateCustomers()
     }
-    // -> function to DELETE a coment on database
-    async function func_handleDeleteComment(comment_id: string){    
-        await api.delete("/comment", {
-            data: {
-                id: comment_id
+
+    async function func_updateCustomers(){
+        const response = await api.get("/customers")
+        set_Customers(response.data)
+    }
+
+    async function func_toUpdateTasksStatus(){
+        const response  = await api.get("/tasks")
+
+        let statusTRUE = 0
+        let statusFALSE = 0
+
+        response.data.map((task: TaskTypes)=> {
+            if(task.status) {
+                statusTRUE += 1
+            }
+            else {
+                statusFALSE += 1
             }
         })
-
-        toast.success("Comentário removido com sucesso")
-
-        await func_updateModalData(modalTaskID) //call function to update modal data
+        
+        set_TasksStatusTrueQuantity(statusTRUE)
+        set_TasksStatusFalseQuantity(statusFALSE)
     }
-    async function func_toogleFilterTasks(status: boolean){
-        await func_updateTask()
-        let data = new Array
-        data.push(taskList.filter((task) => task.status === status))
 
-        set_Tasks(data[0])
-        await func_toGetDateOfTime()
-        // console.log('data:', data)
-
-    }
-    // to get dates of tasks updated
-    async function func_toGetDateOfTime(){
+    async function func_handleGetDatesOfTasks(){
         let dates = [] //var aux
 
         //transformando a data em object e inserindo dentro da variavel DATES
-        tasks.map((task: any) => {
+        tasks2.map((task: any) => {
             let timeSlamp = new Date(task.created_at) 
             dates.push(timeSlamp) 
         })
@@ -188,39 +135,129 @@ export function Body({taskList, customerList, categoryList}: DashboardBodyProps)
         set_TaskDates(filteredArray)
     }
 
+    async function func_updateModalData(taskID: string){
+        await func_updateComments(taskID) // to update the user comments
+
+        const taskFilteredForModal = tasks.find((task: any) => task.id === taskID)
+        const customerFilteredForModal = customers.find(customer => customer?.id == taskFilteredForModal?.customer_id)
+      
+        set_ModalTaskID(taskID) //set ID of modal task
+        set_ModalTask(taskFilteredForModal) //set modal task
+        set_ModalCustomer(customerFilteredForModal) //set modal customer
+    }
+
+    async function func_handleAddComment(comment: string){
+        //verify is the user really types anything
+        if(comment.length == 0){
+          toast.error("Insira algum comentário antes")
+          return
+        }
+    
+        //insert the new comment inside database
+        await api.post('/comment', {
+          text: comment,
+          task_id: modalTaskID
+        })
+    
+        toast.success("Comentário adicionado com sucesso") //show a sucess message to user
+
+        await func_updateModalData(modalTaskID) //call function to update modal data
+        
+    }
+
+    async function func_handleFilterTasks(status: boolean){
+        await func_updateTasks()
+
+        if(status){
+            set_TrueTasksActive(true)
+            set_FalseTasksActive(false)
+            set_TotalTasksActive(false)
+        } else {
+            set_FalseTasksActive(true)
+            set_TrueTasksActive(false)
+            set_TotalTasksActive(false)
+        }
+        await func_updateTasks()
+        let data = new Array
+        data.push(tasks.filter((task) => task.status === status))
+
+        set_Tasks2(data[0])
+        await func_handleGetDatesOfTasks()
+        // console.log('data:', data)
+
+    }
+
+    async function func_handleDeleteComment(comment_id: string){    
+        await api.delete("/comment", {
+            data: {
+                id: comment_id
+            }
+        })
+
+        toast.success("Comentário removido com sucesso")
+
+        await func_updateModalData(modalTaskID) //call function to update modal data
+    }
+
+    async function func_handleFinishUnfinishTask(task: TaskTypes){
+        const response = await api.put("/task/status", {
+            id: task.id,
+            status: task.status
+        })
+
+        if(response.data.status){
+            toast.success('Tarefa concluída!')
+            set_ModalView(false)
+        } else {
+            toast.warning('Status de conclusão desfeito!')
+        }
+        
+        await func_updateTasks()
+    }
+
+    async function func_handleCloseModalView(){
+        set_ModalView(!modalView)
+    } 
+
+    async function func_handleOpenModalView(taskID?: string){
+        await func_updateModalData(taskID)
+        set_ModalView(!modalView)
+    } 
+    
 
     return (
         <>            
             <div>
-                <main id={Styles.container}>
+                <main id={STYLES.container}>
 
-                        <article id={Styles.taskSection}>
-                                <section id={Styles.tasksStatusSection}>
-                                    <button id={Styles.statusTOTAL} onClick={async () => await func_updateButton()}>
+                        <article id={STYLES.taskSection}>
+                                <section id={STYLES.tasksStatusSection}>
+                                    <button id={totalTasksActive ? STYLES.statusTOTAL: STYLES.statusOFF} onClick={async () => await func_updateDashboard()}>
                                         <p> Tarefas no total: {tasksStatusTrueQuantity + tasksStatusFalseQuantity} </p>
                                     </button>
-                                    <button id={Styles.statusTRUE} onClick={async () => await func_toogleFilterTasks(true)}>
+                                    <button id={trueTasksActive ? STYLES.statusTRUE: STYLES.statusOFF} onClick={async () => await func_handleFilterTasks(true)}>
                                         <p> Tarefas concluídas: {tasksStatusTrueQuantity} </p>
                                     </button>
-                                    <button id={Styles.statusFALSE} onClick={async () => await func_toogleFilterTasks(false)}>
+                                    <button id={falseTasksActive ? STYLES.statusFALSE: STYLES.statusOFF} onClick={async () => await func_handleFilterTasks(false)}>
                                         <p> Tarefas aguardando conclusão: {tasksStatusFalseQuantity} </p>
                                     </button>
-                                    <button id={Styles.refreshButton} onClick={() => func_updateButton()}>
+                                    <button id={STYLES.refreshButton} onClick={() => func_updateDashboard()}>
                                         <FiRefreshCcw />
                                     </button>
                                 </section>
 
-                                {tasksDates.map((date: string, index) => {
+                                {tasksDates.map((date: string) => {
                                     return (
                                         <>
-                                            <div className={Styles.taskContainer}>                  
-                                                <div className={Styles.dateText}>
+                                            <div className={STYLES.taskContainer}>                  
+                                                <div className={STYLES.dateText}>
                                                     <p>
                                                         {date}
                                                     </p>
                                                 </div>
-                                                <div className={Styles.taskInfoContainer}>
-                                                    {tasks.map((task: TaskTypes, index) => {
+                                                
+                                                <div className={STYLES.taskInfoContainer}>
+                                                    {tasks2.map((task: TaskTypes, index) => {
                                                         let customer = customers.find(customer => customer.id == task.customer_id)
                                                 
                                                         let timeSlamp = new Date(task.created_at)
@@ -230,16 +267,16 @@ export function Body({taskList, customerList, categoryList}: DashboardBodyProps)
                                                         if(dateTimeCustomer === date){
                                                             return (
                                                                 <>
-                                                                    <section key={index} className={Styles.taskList}>
-                                                                        <button className={Styles.taskItem} onClick={() => func_toogleOpenCloseModalView(task.id)} >
+                                                                    <section key={index} className={STYLES.taskList}>
+                                                                        <button className={STYLES.taskItem} onClick={() => func_handleOpenModalView(task.id)} >
                                                                             {task.status ? (
-                                                                                <div className={Styles.activeClass}></div> ): (
-                                                                                <div className={Styles.notActiveClass}></div> 
+                                                                                <div className={STYLES.activeClass}></div> ): (
+                                                                                <div className={STYLES.notActiveClass}></div> 
                                                                             )}
-                                                                            <div className={Styles.taskItemDetails}>
-                                                                                <span className={Styles.customerName}>{customer.name}<p className={Styles.branch_name}>({categoryList[Number(task.category_id)-1].name})</p></span>
-                                                                                <span className={Styles.slash}></span>
-                                                                                <span className={Styles.vehicleName}>{task.vehicleName.toUpperCase()}</span>
+                                                                            <div className={STYLES.taskItemDetails}>
+                                                                                <span className={STYLES.customerName}>{customer.name}<p className={STYLES.branch_name}>({categoriesFSSP[Number(task.category_id)-1].name})</p></span>
+                                                                                <span className={STYLES.slash}></span>
+                                                                                <span className={STYLES.vehicleName}>{task.vehicleName.toUpperCase()}</span>
                                                                             </div>
                                                                         </button>
                                                                     </section>
@@ -260,13 +297,15 @@ export function Body({taskList, customerList, categoryList}: DashboardBodyProps)
                 <div>
                     {modalView && (
                         <ModalComponent
-                            isOpen={modalView}
+                            user={user}
                             task={modalTask}
+                            isOpen={modalView}
                             comments={modalComments}
-                            customersList={customers}
-                            onRequestClose={func_toogleOpenCloseModalView}
-                            onRequestFinishUnfinish={func_updateTaskStatus}
+                            customer={modalCustomer}
+                            onRequestClose={func_handleCloseModalView}
                             onRequestAddComent={func_handleAddComment}
+                            onRequestUpdateTask={updateTask}
+                            onRequestFinishUnfinish={func_handleFinishUnfinishTask}
                             onRequestDeleteComment={func_handleDeleteComment}
                         />
                     )}

@@ -18,6 +18,7 @@ class UserController {
                 id: true,
                 name: true,
                 email: true,
+                status: true,
                 admin_mode: true,
             }
         })
@@ -37,7 +38,8 @@ class UserController {
             }
         })
         if(!userisAdmin) {
-            throw new Error('Only admin users can have access to this list')
+            res.status(401).send('Only admin users can have access to this list')
+            return
         }
 
         const response = await prismaClient.user.findMany({
@@ -78,7 +80,8 @@ class UserController {
         const { name, email, password } = req.body;
         //check if there is a email passed by param
         if(!email) {
-            throw new Error("Email not fulfilled");
+            res.status(400).send("Email not fulfilled");
+            return
         }
 
         //check if there is a user already created
@@ -90,7 +93,8 @@ class UserController {
 
         //If already exists, throw a error
         if(userAlreadyExists){
-            throw new Error ("User already exists")
+            res.status(400).send("User already exists")
+            return
         }
 
         const passwordHash = await hash(password, 8) //crypt the password

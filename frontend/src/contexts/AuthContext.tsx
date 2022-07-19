@@ -122,10 +122,9 @@ export function AuthProvider({children}: AuthProviderProps) {
             // Exibir mensagem de sucesso
             toast.success("Conta criada com sucesso")
 
-            // Router.push('/')
         } catch (err) {
-            toast.error("Erro ao criar conta!")
-            console.log('ERRO AO CADASTRAR')
+            toast.error(err.response.data)
+            console.log(err.response.data)
         }   
     }
 

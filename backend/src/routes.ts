@@ -25,9 +25,8 @@ router.get("/categories", isAuthenticated, new CategoryController().Categories) 
 // ROTA TASK
 router.get("/task", isAuthenticated, new TaskController().Task) //get a specific task
 router.get("/tasks", isAuthenticated, new TaskController().Tasks) //get all the task
-router.get("/tasksbystatus", isAuthenticated, new TaskController().TasksByStatus) //get all the task
 router.post("/task", isAuthenticated, new TaskController().TaskCreate) //create a new task
-router.put("/task/status", isAuthenticated, new TaskController().TaskChangeStatus) //create a new task
+router.put("/task/status", isAuthenticated, new TaskController().TaskChangeStatus) //change status of a task
 router.get("/task/category", isAuthenticated, new TaskController().TasksByCategory) //get all the task of a specific category
 
 // ROTA COMMENT

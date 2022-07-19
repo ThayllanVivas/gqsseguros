@@ -161,27 +161,6 @@ class TaskController {
 
         return res.json(response);
     }
-
-    async TasksByStatus(req: Request, res: Response, next: NextFunction){
-        const {status} = req.query
-        const statusConverted = (status == 'true')
-
-        const response = await prismaClient.task.findMany({
-            where: {
-                status: statusConverted
-            },
-            select: {
-                id: true,
-                vehiclePrice: true,
-                vehicleName: true,
-                vehicleYear: true,
-                description: true,
-                category_id: true
-            }
-        })
-
-        return res.json(response)
-    }
 }
 
 export {TaskController}

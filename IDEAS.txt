@@ -1,40 +1,17 @@
 - [FEITO] Quando usúario concluir tarefa, mostrar opção de se foi com sucesso ou não
 	[não adicionado]-> Adicionar campos para que inclua seguradora escolhida, valor do seguro e outros dados importantes
 - [FEITO] Quando usuário escolher uma modalidade diferente (seguro novo, recuperação, endosso, etc) mudar o nome do botão CRIAR para ser
-compativel com a modalidade escolhida
+    compativel com a modalidade escolhida
 - [FEITO] Enquanto usuário não preencher todos os campos necessários, fazer com que o botão CRIAR fique em verde apagado (disabled)
 - [FEITO] IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
 - [FEITO] Alterar código para que os comentários da tarefa sejam retornados e não os comentários do usuário
 - [FEITO] [DESFEITO por não haver necessidade] Adicionar rodapé com informações de quem é o usuário, qual perfil é o dele, etc
 - [FEITO] LISTAR USUÁRIOS e seus status na aba NOVO USUÁRIO
 - [FEITO] Adicionar opção de CANCELAR ACESSO de um usuário ao sistema
+- [FEITO] Remover opção de ADICIONAR COMENTÁRIOS e finalizar/restaurar uma atividade em caso do user ser ADMIN
+- [FEITO] Opção de que ao clicar em TAREFAS CONCLUÍDAS ou TAREFAS AGUARDANDO CONCLUSÃO e filtrar pelas mesmas somente
+- [FEITO] Listar clientes na aba de NOVO CLIENTE
+
 - Adicionar NOME DO RESPONSÁVEL pela atividade em caso do user ser ADMIN
-- Remover opção de ADICIONAR COMENTÁRIOS e finalizar/restaurar uma atividade em caso do user ser ADMIN
 - Adicionar opção do admin ENVIAR TAREFA para outro usuário com todos os dados da mesma
 - Adicionar campo para pesquisar tarefas a partir do header com o nome do cliente e/ou nome do carro
-- Opção de que ao clicar em TAREFAS CONCLUÍDAS ou TAREFAS AGUARDANDO CONCLUSÃO e filtrar pelas mesmas somente
-
-
-[FEITO]
---- ADMIN_MODE ---
-Quando se é admin, é necessário que fique visível TODOS os dados de quais atividades foram realizadas, vendidas, não vendidas, 
-concluídas, por quem, quando.
-
-Passo a passo:
-[FEITO] 1 - Criar modo admin no banco de dados
-[FEITO] 2 - implementar código que verifique se o usuário é admin
-	2.1 - necessário pegar o ID do usuário para, com código, verificar no banco de dados o modo do usuário
-[FEITO] 3 - se for admin, banco de dados retorno todos os dados disponíveis até então para o dashboard do admin
-	3.1 - IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
-
---- códigos e comandos
-// in axios.d.ts
-import 'axios';
-
-declare module 'axios' {   
-    export interface AxiosRequestConfig {
-        status?: string;   
-    } 
-}
-
-//code to create an migration: "yarn prisma migrate dev"

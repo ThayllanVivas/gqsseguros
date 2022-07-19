@@ -1,6 +1,5 @@
 // -- START OF IMPORTS -- //
 import Head from 'next/head'
-import React, { useEffect, useState }  from 'react'
 import { Body } from './dashboardBody'
 import { Header } from "../../components/header"
 import { canSSRAuth } from "../../utils/canSSRAuth"
@@ -8,9 +7,9 @@ import { setupAPIClient } from "../../services/api"
 import { DashboardProps } from '../../contexts/TypesAndInterfaces'
 
 // -- START OF THE COMPONENT -- //
-export default function Dashboard({taskList, customerList, categoryList}: DashboardProps){
+export default function Dashboard({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps){
 
-    // -- RETURN -- //
+    // --- RETURN --- //
     return (
         <>
             <Head>
@@ -20,12 +19,10 @@ export default function Dashboard({taskList, customerList, categoryList}: Dashbo
             <Header activePage='dashboardPage' />
             
             <Body 
-                taskList={taskList} 
-                customerList={customerList}
-                categoryList={categoryList}
+                tasksFSSP={tasksFSSP} 
+                customersFSSP={customersFSSP}
+                categoriesFSSP={categoriesFSSP}
             />
-
-            {/* <Footer /> */}
         </>
     )
 }
@@ -33,15 +30,15 @@ export default function Dashboard({taskList, customerList, categoryList}: Dashbo
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
     const api = setupAPIClient(ctx)
-    const taskList = await api.get("/tasks")
-    const customerList = await api.get("/customers")
-    const categoryList = await api.get("/categories")
+    const tasksFSSP = await api.get("/tasks")
+    const customersFSSP = await api.get("/customers")
+    const categoriesFSSP = await api.get("/categories")
 
     return {
       props: {
-            taskList: taskList.data,
-            customerList: customerList.data,
-            categoryList: categoryList.data
+            tasksFSSP: tasksFSSP.data,
+            customersFSSP: customersFSSP.data,
+            categoriesFSSP: categoriesFSSP.data
       }
     }
 })

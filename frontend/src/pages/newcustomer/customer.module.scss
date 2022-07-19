@@ -1,99 +1,35 @@
-.container {
-    max-width: 720px;
-    margin: 4rem auto;
-    padding: 0 2rem;
+#newUserContainer {
     display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+    flex-direction: row;
+    width: 1200px;
+    height: calc(100vh - 100px);
+    display: flex;
+    margin: 0 auto;
+    // background-color: orange;
 
-    h1 {
-        color: var(--white);
-    }
-
-    .form {
+    // SIGNUP SECTION
+    #signUpContainer {
+        width: 49%;
         display: flex;
+        justify-content: center;
+        align-items: center;
         flex-direction: column;
-        margin: 1rem 0;
     
-        .input {
-            background-color: var(--dark-900);
-            padding: 1rem 1.5rem;
-            height: 40px;
-            border-radius: 0.3rem;  
+        h1 {
+            display: flex;
             color: var(--white);
-            border: 1px solid var(--gray-100);
-            margin-bottom: 1rem;
-            font-weight: bold;
-        
-            &::placeholder {
-                color: var(--red-900);
-                opacity: 0.5;
-                font-weight: bold;
-            }
+            padding-bottom: 1rem;
+            margin-top: 2rem;
         }
     
-        .select {
-            background-color: var(--dark-900);
-            border: 0;
-            padding: 0 1rem;
-            height: 40px;
-            border-radius: 0.3rem;  
-            color: var(--white);
-            border: 1px solid var(--gray-100);
-            margin-bottom: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-        
-            &::placeholder {
-                color: var(--red-900);
-                filter: brightness(0.5);
-                font-weight: bold;
-            }
-        }
+        form {
+            width: 100%;  
+            display: flex;
+            flex-direction: column;
+            margin-right: 1rem;            
 
-        .textarea {
-            background-color: var(--dark-900);
-            color: var(--white);
-            min-height: 120px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.3rem;
-            border-radius: 0.3rem;
-
-            &::placeholder {
-                color: var(--red-900);
-                opacity: 0.5;
-                font-weight: bold;
-            }
-        }
-        #buttonContainer {
-
-            .buttonClean {
-                min-width: 39%;
-                height: 40px;
-                border: 0;
-                background-color: var(--red-900);
-                font-weight: bold;
-                font-size: 1.2rem;
-                border-radius: 0.3rem;
-                color: var(--dark-700);
-                margin-left: 1%;
-            }
-
-            .buttonCleanDISABLED {
-                min-width: 39%;
-                height: 40px;
-                border: 0;
-                background-color: var(--red-900);
-                opacity:  0.5;
-                font-weight: bold;
-                font-size: 1.2rem;
-                border-radius: 0.3rem;
-                color: var(--dark-700);
-                margin-left: 1%;
-            }
-
-            .buttonAdd {
-                min-width: 60%;
+            #buttonAdd {
+                width: 60%;
                 height: 40px;
                 border: 0;
                 background-color: var(--green-900);
@@ -101,77 +37,135 @@
                 font-size: 1.2rem;
                 border-radius: 0.3rem;
                 color: var(--dark-700)
-            }            
+            }  
+
+            #buttonAddDISABLED{
+                width: 60%;
+                height: 40px;
+                border: 0;
+                background-color: var(--green-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                opacity:  0.5;
+            }
+
+            #buttonClean {
+                width: 39%;
+                height: 40px;
+                border: 0;
+                background-color: var(--red-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                margin-left: 1%;
+            }
+
+            #buttonCleanDISABLED {
+                width: 39%;
+                height: 40px;
+                border: 0;
+                background-color: var(--red-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                margin-left: 1%;
+                opacity:  0.5;
+            }  
         }
+    }
+
+    //DIVISORY IN THE MIDDLE OF CONTAINERS
+    #divisory {
+        width: 0.2%;
+        background-color: var(--dark-700);
+        // background-color: antiquewhite;
+    }
+
+    // USERS LIST SECTION
+    #userContainer {
+        width: 49%;
+        overflow-x: none;
+        display: flex;
+        align-items: center;
+        // justify-content: center;
+        flex-direction: column;
+        color: var(--white);
+        margin-left: 1rem;
+        overflow-x: scroll;
+
+        #userContainerHeader{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+
+            h1 {
+                display: flex;
+                justify-content: right;
+                width: 70%;
+                // background-color: antiquewhite;
+            }
+
+            #refreshButton {
+                background: transparent;
+                width: 30%;
+                border: 0;
+                // background-color: aquamarine;
+                margin-left: 0.5rem;
+                color: var(--green-900);
+                font-size: 22px;
+                padding-top: 0.3rem;
+            }
+        }
+
         
-    }
-}
+        
+        ul.userList {
+            padding: 1rem 0;
+            width: 100%;
+            display: inherit;
+            flex-direction: inherit;
+            align-items: center;
 
-.productUpload {
-    width: 100%;
-    height: 300px;
-    background-color: var(--dark-900);
-    margin-bottom: 1rem;
-    border-radius: 0.3rem;
-    border: 1px solid var(--gray-100);
+            
+            li {
+                width: inherit;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 1rem;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    .productImage {
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        max-width: 50%;
-        object-fit: cover;
-    }
+                list-style-type: circle;
+                padding: 0.4rem 0.3rem;
+                border-radius: 0.4rem;
+                background-color: var(--dark-700);
 
-    span {
-        font-size: 25px;
-        color: var(--gray-100)
-    }
-}
+                .userStatusOn {
+                    background-color: var(--main-button);
+                }
+                .userStatusOff {
+                    background-color: var(--red-900);
+                }
 
+                .userStatusOn, .userStatusOff {
+                    border: 0px;
+                    font-weight: bold;
+                }
 
+                .userInfo, .userInfo {
+                    width: 49%;
+                    margin: 0 1%;
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.3rem;
+                }
 
-.icons {
-    width: 100%;
-    display: flex;
-    // justify-content: space-around;
-    margin-bottom: 1rem;
-
-    span {
-        color: var(--red-900);
-        font-size: 25px;
-        // opacity: 0.7;
-        max-width: 50%;
-        cursor: pointer;
-    }
-
-    .uploadProductPicture {
-        min-width: 49.5%;
-        max-width: 49.5%;
-        cursor: pointer;
-
-        display: flex;
-        justify-content: center;
-
-        input {
-            display: none;
-            // visibility: hidden;
-            // max-width: 1%;
+                
+            }
         }
     }
-    .removeProductPicture {
-        min-width: 49.5%;
-        max-width: 49.5%;
-        cursor: pointer;
-
-        display: flex;
-        justify-content: center;
-
-        border-left: 1px solid var(--gray-100);
-    }
+ 
 }
-
