@@ -1,13 +1,14 @@
 import Modal from 'react-modal';
-import Styles from './styles.module.scss';
-import { useState } from 'react';
+import STYLES from './styles.module.scss';
+import { useEffect, useState } from 'react';
 import { FiTrash2, FiX } from 'react-icons/fi';
-import { ModalTaskProps } from '../../contexts/TypesAndInterfaces';
+import { ModalTaskProps, UserType } from '../../contexts/TypesAndInterfaces';
 
 export function ModalComponent(
   {isOpen, 
     user, 
     task, 
+    users,
     comments, 
     customer, 
     onRequestUpdateTask, 
@@ -17,6 +18,17 @@ export function ModalComponent(
     onRequestDeleteComment}: ModalTaskProps){
 
   const [comment, set_Comment] = useState('')
+  const [taskResponsable, set_taskResponsable] = useState<UserType>()
+
+  useEffect(() => {
+    function toGetTaskResponsable(){
+      const userFilter = users.find((user) => user.id == task.user_id)
+      console.log('userFilter: ', userFilter)
+      set_taskResponsable(userFilter)
+    }
+
+    toGetTaskResponsable()
+  }, [users])
 
   const customStyles = {
     overlay: {
@@ -38,8 +50,8 @@ export function ModalComponent(
   return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
 
-      <div className={Styles.container}>
-        <div className={Styles.header}>
+      <div className={STYLES.container}>
+        <div className={STYLES.header}>
           <h2>Detalhes da tarefa</h2>
           <button
               type="button"
@@ -51,121 +63,129 @@ export function ModalComponent(
           </button>
         </div>  
 
-          <section className={Styles.containerItem}>          
-            <div id={Styles.taskInfo}>
+        {
+          user.admin_mode && (
+            <div id={STYLES.taskResponsable}>
+                <p>Responsável: {taskResponsable?.name.toLocaleUpperCase()}</p> 
+            </div>
+          )
+        }
 
-              {/* sobre ASSEGURADO */}
+        <section className={STYLES.containerItem}>          
+          <div id={STYLES.taskInfo}>
 
-              <div className={Styles.sonOfTaskInfo}>
-                <div className={Styles.propertyInfo}>
-                  <p className={Styles.details}>Assegurado:</p> 
-                </div>
+            {/* sobre ASSEGURADO */}
 
-                <div className={Styles.descriptionInfo}>
-                  <span>{customer?.name.toLocaleUpperCase()}</span>
-                </div>
+            <div className={STYLES.sonOfTaskInfo}>
+              <div className={STYLES.propertyInfo}>
+                <p className={STYLES.details}>Assegurado:</p> 
               </div>
 
-              {/* sobre CARRO */}
+              <div className={STYLES.descriptionInfo}>
+                <span>{customer?.name.toLocaleUpperCase()}</span>
+              </div>
+            </div>
 
-              <div className={Styles.sonOfTaskInfo}>
-                <div className={Styles.propertyInfo}>
-                  <p className={Styles.details}>Carro [NOME]:</p> 
-                </div>
+            {/* sobre CARRO */}
 
-                <div className={Styles.descriptionInfo}>
-                  <span>{task.vehicleName.toUpperCase()}</span>
-                </div>
+            <div className={STYLES.sonOfTaskInfo}>
+              <div className={STYLES.propertyInfo}>
+                <p className={STYLES.details}>Carro [NOME]:</p> 
               </div>
 
-              {/* sobre ANO do carro */}
+              <div className={STYLES.descriptionInfo}>
+                <span>{task.vehicleName.toUpperCase()}</span>
+              </div>
+            </div>
 
-              <div className={Styles.sonOfTaskInfo}>
-                <div className={Styles.propertyInfo}>
-                  <p className={Styles.details}>Carro [ANO]:</p>
-                </div>
+            {/* sobre ANO do carro */}
 
-                <div className={Styles.descriptionInfo}>
-                  <span>{task.vehicleYear}</span>
-                </div>
+            <div className={STYLES.sonOfTaskInfo}>
+              <div className={STYLES.propertyInfo}>
+                <p className={STYLES.details}>Carro [ANO]:</p>
               </div>
 
-              {/* sobre VALOR do carro */}
+              <div className={STYLES.descriptionInfo}>
+                <span>{task.vehicleYear}</span>
+              </div>
+            </div>
 
-              <div className={Styles.sonOfTaskInfo}>
-                <div className={Styles.propertyInfo}>
-                  <p className={Styles.details}>Carro [FIPE]:</p>
-                </div>
+            {/* sobre VALOR do carro */}
 
-                <div className={Styles.descriptionInfo}>
-                  <span>R$ {task.vehiclePrice}</span>
-                </div>
+            <div className={STYLES.sonOfTaskInfo}>
+              <div className={STYLES.propertyInfo}>
+                <p className={STYLES.details}>Carro [FIPE]:</p>
               </div>
 
-              {/* sobre DESCRIÇÃO */}
+              <div className={STYLES.descriptionInfo}>
+                <span>R$ {task.vehiclePrice}</span>
+              </div>
+            </div>
 
-              {task.description && (
-                <div className={Styles.sonOfTaskInfo}>
-                  <div className={Styles.propertyInfo}>
-                    <p className={Styles.details}>Descrição:</p>
-                  </div>
-                  <div className={Styles.descriptionInfo}>
-                    <span>{task.description}</span>
-                  </div>
+            {/* sobre DESCRIÇÃO */}
+
+            {task.description && (
+              <div className={STYLES.sonOfTaskInfo}>
+                <div className={STYLES.propertyInfo}>
+                  <p className={STYLES.details}>Descrição:</p>
                 </div>
+                <div className={STYLES.descriptionInfo}>
+                  <span>{task.description}</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <hr />
+
+          <div id={STYLES.taskCommentsContainer}>
+              {comments.length == 0 ? (
+                <>
+                  <h4>Nenhum comentário encontrado</h4>
+                </>
+              ):(
+                <>
+                  <h4>Histórico de comentários</h4>
+                </>
               )}
+              {comments.map((comment, index) => {
+                
+                // convert date from object to string to show
+                let timeSlamp = new Date(comment.created_at)
+                let localeDateString = timeSlamp.toLocaleDateString()
+                let localeTimeString = timeSlamp.toLocaleTimeString()
+                let dateTimeComment = [] 
+                dateTimeComment.push(localeDateString)
+                dateTimeComment.push(localeTimeString)
+                let dateTime = dateTimeComment.join(' ')
+
+                return (
+                  <>
+                    <div key={comment.id}>
+                      <p className={STYLES.commentsContainer}>
+                        <span>{dateTime}: </span> {comment.text}
+                      </p>
+                      {task.status && user.admin_mode && (
+                        <>
+                        </>
+                      )}
+                      {task.status && !user.admin_mode && (
+                        <button className={STYLES.deleteCommentButton} onClick={(event) => {
+                          event.preventDefault() 
+                          onRequestDeleteComment(comment.id)
+                        }}>
+                          <FiTrash2 />
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )
+                })}
             </div>
 
             <hr />
-
-            <div id={Styles.taskCommentsContainer}>
-                {comments.length == 0 ? (
-                  <>
-                    <h4>Nenhum comentário encontrado</h4>
-                  </>
-                ):(
-                  <>
-                    <h4>Histórico de comentários</h4>
-                  </>
-                )}
-                {comments.map((comment, index) => {
-                  
-                  // convert date from object to string to show
-                  let timeSlamp = new Date(comment.created_at)
-                  let localeDateString = timeSlamp.toLocaleDateString()
-                  let localeTimeString = timeSlamp.toLocaleTimeString()
-                  let dateTimeComment = [] 
-                  dateTimeComment.push(localeDateString)
-                  dateTimeComment.push(localeTimeString)
-                  let dateTime = dateTimeComment.join(' ')
-
-                  return (
-                    <>
-                      <div key={comment.id}>
-                        <p className={Styles.commentsContainer}>
-                          <span>{dateTime}: </span> {comment.text}
-                        </p>
-                        {task.status && user.admin_mode && (
-                          <>
-                          </>
-                        )}
-                        {task.status && !user.admin_mode && (
-                          <button className={Styles.deleteCommentButton} onClick={(event) => {
-                            event.preventDefault() 
-                            onRequestDeleteComment(comment.id)
-                          }}>
-                            <FiTrash2 />
-                          </button>
-                        )}
-                      </div>
-                    </>
-                  )
-                  })}
-              </div>
-
-              <hr />
-              
-          </section>
+            
+        </section>
 
 
         {
@@ -173,9 +193,9 @@ export function ModalComponent(
             <div>
               {
                 !task.status && (
-                  <form id={Styles.formSection}>
+                  <form id={STYLES.formSection}>
                     <textarea 
-                        className={Styles.textarea} 
+                        className={STYLES.textarea} 
                         placeholder="Insira comentários sobre progressão da tarefa"
                         value={comment}
                         onChange={(e)=> {
@@ -191,14 +211,14 @@ export function ModalComponent(
 
         {
           !user.admin_mode && (
-            <div className={Styles.buttons}>
+            <div className={STYLES.buttons}>
               {
                 task.status ? (
-                  <button id={Styles.addCommentGhost} onClick={(event) => event.preventDefault()}>
+                  <button id={STYLES.addCommentGhost} onClick={(event) => event.preventDefault()}>
                     
                   </button>
                 ) : (
-                  <button id={Styles.addComment} onClick={async () => {
+                  <button id={STYLES.addComment} onClick={async () => {
                     await onRequestAddComent(comment)
                     set_Comment('')
                     }}>
@@ -209,14 +229,14 @@ export function ModalComponent(
 
               {
                 task.status ? (
-                  <button id={Styles.finishedTask} onClick={async () => {
+                  <button id={STYLES.finishedTask} onClick={async () => {
                     await onRequestFinishUnfinish(task)
                     await onRequestUpdateTask()
                     }}>
                     Desfazer conclusão
                   </button>
                 ) : (
-                  <button id={Styles.finishTask} onClick={async () => {
+                  <button id={STYLES.finishTask} onClick={async () => {
                     await onRequestFinishUnfinish(task)
                     await onRequestUpdateTask()
                     }}>
@@ -226,8 +246,7 @@ export function ModalComponent(
               }
           </div>
           )
-        }
-        
+        }        
       </div>
 
     </Modal>

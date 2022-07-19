@@ -54,7 +54,7 @@ class UserController {
 
         const usersList = response.filter((user) => !user.admin_mode)
         
-        return res.json(usersList)
+        return res.json(response)
     }
 
     //change user status

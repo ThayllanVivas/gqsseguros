@@ -1,43 +1,44 @@
 // export INTERFACE section
 export interface HeaderProps {
-    customersFSSP?: CustomerTypes[];
-    tasksFSSP?: TaskTypes[];
+    customersFSSP?: CustomerType[];
+    tasksFSSP?: TaskType[];
     activePage: string;
 }
 export interface DashboardProps {
-    tasksFSSP: TaskTypes[];
-    customersFSSP: CustomerTypes[];
+    tasksFSSP: TaskType[];
+    customersFSSP: CustomerType[];
     categoriesFSSP: CategoryTypes[];
 }
 export interface NewCustomerProps {
-    customersFSSP: CustomerTypes[];
+    customersFSSP: CustomerType[];
 }
 export interface DashboardTaskBodyProps {
     date: string,
-    tasks: TaskTypes[],
-    customers: CustomerTypes[],
+    tasks: TaskType[],
+    customers: CustomerType[],
     handleOpenModalView: (task_id: string) => void,
     categoriesFSSP: CategoryTypes[]
 }
 export interface NewTaskProps {
     branchesFSSP: BranchTypes[];
     categoriesFSSP: CategoryTypes[];
-    customersFSSP: CustomerTypes[];
+    customersFSSP: CustomerType[];
 }
 export interface SignUpProps {
     usersFSSP: UserType[]
 }
 export interface SetTaskProps {
     searchInfo: string,
-    customersFSSP: CustomerTypes[],
-    tasksFSSP: TaskTypes[];
+    customersFSSP: CustomerType[],
+    tasksFSSP: TaskType[];
 }
 export interface ModalTaskProps{
     isOpen: boolean;
     user: UserType;
-    task: TaskTypes;
+    task: TaskType;
+    users: UserType[];
     comments: CommentTypes[];
-    customer: CustomerTypes;
+    customer: CustomerType;
     onRequestUpdateTask: () => void;
     onRequestClose: () => void;
     onRequestFinishUnfinish: (task) => Promise<void>;
@@ -46,7 +47,7 @@ export interface ModalTaskProps{
   }
 
 // export TYPE section
-export type TaskTypes = {
+export type TaskType = {
     id: string,
     status: boolean,
     description: string,
@@ -72,7 +73,7 @@ export type CommentTypes = {
     task_id: string,
     created_at: string
 }
-export type CustomerTypes = {
+export type CustomerType = {
     id: string,
     cpf: string,
     name: string,

@@ -4,27 +4,28 @@ import { toast } from 'react-toastify'
 import { FiRefreshCcw } from "react-icons/fi"
 import { ModalComponent } from '../../components/modal'
 import { useEffect, useState } from 'react'
-import { CommentTypes, CustomerTypes, DashboardProps, TaskTypes, UserType } from '../../contexts/TypesAndInterfaces'
+import { CommentTypes, CustomerType, DashboardProps, TaskType, UserType } from '../../contexts/TypesAndInterfaces'
 import { api } from '../../services/apiClient'
 
 // -- COMPONENT AREA -- //
 export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps){
 
     // -- USESTATE section -- //
-    const [tasks, set_Tasks] = useState<TaskTypes[]>(tasksFSSP) //KEEP IT ON THIS COMPONENT
+    const [tasks, set_Tasks] = useState<TaskType[]>(tasksFSSP) //KEEP IT ON THIS COMPONENT
     const [customers, set_Customers] = useState(customersFSSP) //KEEP IT ON THIS COMPONENT
 
-    const [tasks2, set_Tasks2] = useState<TaskTypes[]>(tasks) //KEEP IT ON THIS COMPONENT
+    const [tasks2, set_Tasks2] = useState<TaskType[]>(tasks) //KEEP IT ON THIS COMPONENT
     const [tasksDates, set_TaskDates] = useState<string[]>([])
     const [tasksStatusTrueQuantity, set_TasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
     const [tasksStatusFalseQuantity, set_TasksStatusFalseQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
 
     const [modalView, set_ModalView] = useState(false) //KEEP IT ON THIS COMPONENT
     const [user, set_user] = useState<UserType>()
-    const [modalTask, set_ModalTask] = useState<TaskTypes>() //KEEP IT ON THIS COMPONENT
+    const [users, set_users] = useState<UserType[]>()
+    const [modalTask, set_ModalTask] = useState<TaskType>() //KEEP IT ON THIS COMPONENT
     const [modalTaskID, set_ModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
     const [modalComments, set_ModalComments] = useState<CommentTypes[]>([]) //KEEP IT ON THIS COMPONENT
-    const [modalCustomer, set_ModalCustomer] = useState<CustomerTypes>() //KEEP IT ON THIS COMPONENT
+    const [modalCustomer, set_ModalCustomer] = useState<CustomerType>() //KEEP IT ON THIS COMPONENT
     const [trueTasksActive, set_TrueTasksActive] =  useState<boolean>(false)
     const [falseTasksActive, set_FalseTasksActive] =  useState<boolean>(false)
     const [totalTasksActive, set_TotalTasksActive] =  useState<boolean>(true)
@@ -37,13 +38,17 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
 
     //to get user info
     useEffect(() => {
-      isAdmin()
+      handleGetUsersInfo()
     }, [])
 
     // -- FUNCTION section
-    async function isAdmin(){
+    async function handleGetUsersInfo(){
         const response = await api.get('/me')
         set_user(response.data)
+        
+        const responseUsers = await api.get('/users')
+        console.log('usersDash: ', responseUsers.data)
+        set_users(responseUsers.data)
     }
 
     async function updateTask(){
@@ -90,7 +95,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         let statusTRUE = 0
         let statusFALSE = 0
 
-        response.data.map((task: TaskTypes)=> {
+        response.data.map((task: TaskType)=> {
             if(task.status) {
                 statusTRUE += 1
             }
@@ -199,7 +204,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         await func_updateModalData(modalTaskID) //call function to update modal data
     }
 
-    async function func_handleFinishUnfinishTask(task: TaskTypes){
+    async function func_handleFinishUnfinishTask(task: TaskType){
         const response = await api.put("/task/status", {
             id: task.id,
             status: task.status
@@ -257,7 +262,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                                                 </div>
                                                 
                                                 <div className={STYLES.taskInfoContainer}>
-                                                    {tasks2.map((task: TaskTypes, index) => {
+                                                    {tasks2.map((task: TaskType, index) => {
                                                         let customer = customers.find(customer => customer.id == task.customer_id)
                                                 
                                                         let timeSlamp = new Date(task.created_at)
@@ -299,6 +304,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                         <ModalComponent
                             user={user}
                             task={modalTask}
+                            users={users}
                             isOpen={modalView}
                             comments={modalComments}
                             customer={modalCustomer}

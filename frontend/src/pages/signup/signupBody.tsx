@@ -25,8 +25,9 @@ export function Body({usersFSSP}: SignUpProps) {
     // to get users updated (only NO admins are insert inside the state)
     async function toGetUsers(){
         const response = await api.get('/users')
+        const filterUsers = response.data.filter((user) => user.admin_mode !== true)
 
-        setUsers(response.data)
+        setUsers(filterUsers)
     }
 
     // to create a new user
