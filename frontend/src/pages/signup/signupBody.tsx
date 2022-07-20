@@ -87,7 +87,7 @@ export function Body({notAdminUsersFSSP}: SignUpProps) {
         <div id={STYLES.signUpContainer}>
             {/* <Image src={logoImg} alt="Logo Sujeito Pizzaria" /> */}
 
-            <h1>Criando nova conta</h1>
+            <h1>CRIANDO NOVA CONTA</h1>
 
             <form onSubmit={handleSignUp}>
               <Input 
@@ -130,7 +130,7 @@ export function Body({notAdminUsersFSSP}: SignUpProps) {
         <div id={STYLES.userContainer}>
 
           <div id={STYLES.userContainerHeader}>
-            <h1>Usuários cadastrados</h1>
+            <h1>USUÁRIOS CADASTRADOS</h1>
 
             <button id={STYLES.refreshButton} onClick={() => func_updateButton()}>
                 <FiRefreshCcw />

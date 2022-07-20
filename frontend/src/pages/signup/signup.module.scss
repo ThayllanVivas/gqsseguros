@@ -4,12 +4,12 @@
     width: 1200px;
     height: calc(100vh - 100px);
     display: flex;
-    margin: 0 auto;
+    margin: 0.8rem auto 0;
     // background-color: orange;
 
     // SIGNUP SECTION
     #signUpContainer {
-        width: 49%;
+        width: 47%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -82,19 +82,20 @@
     #divisory {
         width: 0.2%;
         background-color: var(--dark-700);
+        margin: 0 1rem;
         // background-color: antiquewhite;
     }
 
     // USERS LIST SECTION
     #userContainer {
-        width: 49%;
+        width: 53%;
         overflow-x: none;
         display: flex;
         align-items: center;
         // justify-content: center;
         flex-direction: column;
         color: var(--white);
-        margin-left: 1rem;
+        // margin-left: 1rem;
         overflow-x: auto;
 
         #userContainerHeader{
@@ -106,16 +107,16 @@
             h1 {
                 display: flex;
                 justify-content: right;
-                width: 70%;
+                width: 80%;
                 // background-color: antiquewhite;
             }
 
             #refreshButton {
                 background: transparent;
-                width: 30%;
+                width: 20%;
                 border: 0;
                 // background-color: aquamarine;
-                margin-left: 0.5rem;
+                // margin-left: 0.5rem;
                 color: var(--green-900);
                 font-size: 22px;
                 padding-top: 0.3rem;
@@ -143,6 +144,7 @@
                 padding: 0.4rem 0.3rem;
                 border-radius: 0.4rem;
                 background-color: var(--dark-700);
+                // flex-wrap: wrap;
 
                 .userStatusOn {
                     background-color: var(--main-button);

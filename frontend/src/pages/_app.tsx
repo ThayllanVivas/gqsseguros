@@ -1,7 +1,7 @@
 import '../../styles/globals.scss'
-import {AppProps} from 'next/app'
-import { AuthProvider } from '../contexts/AuthContext'
 import 'react-toastify/dist/ReactToastify.css';
+import { AppProps } from 'next/app'
+import { AuthProvider } from '../contexts/AuthContext'
 import { ToastContainer } from 'react-toastify';
 
 function MyApp({ Component, pageProps }: AppProps) {
