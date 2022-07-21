@@ -12,8 +12,12 @@
 - [FEITO] Opção de que ao clicar em TAREFAS CONCLUÍDAS ou TAREFAS AGUARDANDO CONCLUSÃO e filtrar pelas mesmas somente
 - [FEITO] Listar clientes na aba de NOVO CLIENTE
 - [FEITO] Adicionar NOME DO RESPONSÁVEL pela atividade em caso do user ser ADMIN
+- [FEITO] Adicionar opção para novo usuário ser ADMIN ou USER no cadastro de novo usuário
+- [FEITO] Adicionar opção de editar NOME, EMAIL, SENHA E TIPO do usuário em newUser
+    -> codigo para converter senha em hash
+- [FEITO] Reverter a ordem que as tarefas são mostradas para o mais novo para o mais antigo
+- [FEITO] Adicionar para listar todos os usuários ativos exceto o admin@admin na tela de newUser
 
 - Adicionar campo para pesquisar tarefas a partir do header com o nome do cliente e/ou nome do carro
-- Reverter a ordem que as tarefas são mostradas para o mais novo para o mais antigo
 
 - [PROBLEMAS EM FILTRAR QUEM É RESPONSÁVEL por conta do userState] Adicionar opção do admin ENVIAR TAREFA para outro usuário com todos os dados da mesma

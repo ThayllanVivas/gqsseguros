@@ -12,11 +12,14 @@ import { BranchesController } from './controllers/BranchesController';
 const router = Router(); //to copy what is inside Router() into router const
 
 // ROTA USER 
+
 router.post("/signup", new UserController().UserCreate); //create new user 
 router.post('/signin', new UserController().UserAuth) //make login
-router.get("/me", isAuthenticated, new UserController().User); //access my profile
+router.get("/me", isAuthenticated, new UserController().Me); //access my profile
+router.get("/user", isAuthenticated, new UserController().User); //get all users
 router.get("/users", isAuthenticated, new UserController().Users); //get all users
 router.put('/user/status', isAuthenticated, new UserController().UserChangeStatus) //change user status
+router.put("/editup", isAuthenticated, new UserController().UserEdit); //edit a user profile
 
 // ROTA CATEGORY
 router.post("/category", isAuthenticated, new CategoryController().CategoryCreate) //create category

@@ -1,16 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import logoImg from '../../public/logo.png'
-import styles from '../../styles/home.module.scss'
-import { Input } from '../components/ui/input/index'
-import { Button } from '../components/ui/button'
-import { AuthContext } from '../contexts/AuthContext'
-import { useContext, FormEvent, useState } from 'react'
-import { toast } from 'react-toastify'
-// import { GetServerSideProps } from 'next'
-// import { parseCookies } from 'nookies'
-import { canSSRGuest } from '../utils/canSSRGuest'
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../../styles/home.module.scss';
+import logoImg from '../../public/logo.png';
+import { Input } from '../components/ui/input/index';
+import { toast } from 'react-toastify';
+import { Button } from '../components/ui/button';
+import { AuthContext } from '../contexts/AuthContext';
+import { canSSRGuest } from '../utils/canSSRGuest';
+import { useContext, FormEvent, useState } from 'react';
 
 
 export default function Home() {

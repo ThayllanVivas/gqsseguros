@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Styles from './header.module.scss'
+import STYLES from './header.module.scss'
 import { api } from '../../services/api'
 import { FiLogOut} from 'react-icons/fi'
 import { signOut } from '../../contexts/AuthContext'
@@ -30,35 +30,35 @@ export function Header({activePage}){
     }, [])
 
     return (
-        <header id={Styles.headerContainer}>
-            <div id={Styles.logoNav}>
+        <header id={STYLES.headerContainer}>
+            <div id={STYLES.logoNav}>
                 <Link href="/dashboard">
-                    <img id={Styles.logo} src="./logo.png" width={40} height={46}/>
+                    <img id={STYLES.logo} src="./logo.png" width={40} height={46}/>
                 </Link>
                 {/* <input 
                     type="text"
                     placeholder="Pesquisar tarefa..."
-                    id={Styles.logoInput}
+                    id={STYLES.logoInput}
                     value={taskNameSearch}
                     onChange={(e) => setTaskNameSearch(e.target.value)}
                 /> */}
             </div>
-            <nav id={Styles.menuNav}>
+            <nav id={STYLES.menuNav}>
                 <Link href="/dashboard">
-                    <a className={activePage === 'dashboardPage' ? Styles.dashboardPageActive : undefined}>Início</a>
+                    <a className={activePage === 'dashboardPage' ? STYLES.dashboardPageActive : undefined}>Início</a>
                 </Link>
 
                 <Link href="/newcustomer">
-                    <a className={activePage === 'customerPage' ? Styles.customerPageActive : undefined}>Novo cliente</a>
+                    <a className={activePage === 'customerPage' ? STYLES.customerPageActive : undefined}>Novo cliente</a>
                 </Link>
 
                 <Link href="/newtask">
-                    <a className={activePage === 'newTaskPage' ? Styles.taskPageActive : undefined}>Nova tarefa</a>
+                    <a className={activePage === 'newTaskPage' ? STYLES.taskPageActive : undefined}>Nova tarefa</a>
                 </Link>
 
                 {userInfo?.admin_mode && (
-                    <Link href="/signup">
-                        <a className={activePage === 'signUpPage' ? Styles.signUpPageActive : undefined}>Novo usuário</a>
+                    <Link href="/newuser">
+                        <a className={activePage === 'newUserPage' ? STYLES.newUserPageActive : undefined}>Novo usuário</a>
                     </Link>
                 )}     
 

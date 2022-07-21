@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from 'express'
 import prismaClient from '../prisma';
-import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { compare, hash } from 'bcryptjs';
+import { NextFunction, Request, Response } from 'express';
 
 class UserController {
 
     //access profile
-    async User(req: Request, res: Response, next: NextFunction){
+    async Me(req: Request, res: Response, next: NextFunction){
 
         const user_id = req.user_id;
 
@@ -25,6 +25,19 @@ class UserController {
 
         return res.json(user)
     }
+
+    //get all specific user info
+    async User(req: Request, res: Response, next: NextFunction){
+        const email= req.query.email as string;
+
+        const response = await prismaClient.user.findFirst({
+            where: {
+                email: email
+            }
+        })
+
+        return res.json(response)
+    } 
 
     //list all users
     async Users(req: Request, res: Response, next: NextFunction){
@@ -77,7 +90,10 @@ class UserController {
     //create new user 
     async UserCreate (req: Request, res: Response, next: NextFunction){
 
-        const { name, email, password } = req.body;
+        const { name, email, password, typeUser } = req.body;
+        const adminOrUser = (typeUser == 'true') //convert string to boolean
+        // console.log(adminOrUser)
+        // return;
         //check if there is a email passed by param
         if(!email) {
             res.status(400).send("Email not fulfilled");
@@ -104,6 +120,7 @@ class UserController {
                 name: name,
                 email: email,
                 password: passwordHash,
+                admin_mode: adminOrUser
             }, 
             select: {
                 id: true,
@@ -113,6 +130,34 @@ class UserController {
         })
         return res.json(user)
    }
+
+   //edit user info
+    async UserEdit (req: Request, res: Response, next: NextFunction){
+        const { userEditInfoID, name, email, password, admin_mode } = req.body;
+
+        const adminOrUser = (admin_mode == 'true') //convert string to boolean
+        const passwordHash = await hash(password, 8) //turn the password into hash password type
+
+        const response = await prismaClient.user.update({
+            where: {
+                id: userEditInfoID
+            },
+            data: {
+                name: name,
+                email: email,
+                password: passwordHash,
+                admin_mode: adminOrUser
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                admin_mode: true
+            }
+        })
+
+        return res.json(response)
+    }
     
    //make login
     async UserAuth (req: Request, res: Response, next: NextFunction) {
@@ -162,6 +207,8 @@ class UserController {
             token: token
         })
     }
+
+    
 }
 
 export { UserController }

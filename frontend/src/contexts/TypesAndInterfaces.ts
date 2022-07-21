@@ -26,6 +26,7 @@ export interface NewTaskProps {
 }
 export interface SignUpProps {
     notAdminUsersFSSP: UserType[];
+    adminUsersFSSP: UserType[];
 }
 export interface SetTaskProps {
     searchInfo: string,
@@ -95,8 +96,8 @@ export type UserType = {
     admin_mode: boolean,
 }
   
-//export extra TYPE section
-export type ChangeUserStatusType = {
-    id: string,
-    status: boolean
-}
+// //export extra TYPE section
+// export type ChangeUserStatusType = {
+//     id: string,
+//     status: boolean
+// }

@@ -135,6 +135,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         const filteredArray = datesToString.filter((ele, pos) => {
             return datesToString.indexOf(ele) == pos
         })
+        filteredArray.reverse()
         
 
         set_TaskDates(filteredArray)
