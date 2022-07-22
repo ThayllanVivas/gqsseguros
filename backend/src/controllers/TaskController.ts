@@ -169,6 +169,39 @@ class TaskController {
 
         return res.json(response);
     }
+
+    //change responsable for task
+    async TaskChangeUser(req: Request, res: Response, next: NextFunction){
+
+        const {taskID, newUserID} = req.body
+
+        const response = await prismaClient.task.update({
+            where:{
+                id: taskID
+            },
+            data: {
+                user_id: newUserID
+            },
+            select: {
+                id: true,
+                description: true,
+                status: true,
+
+                vehiclePrice: true,
+                vehicleName: true,
+                vehicleYear: true,
+
+                branch_id: true,
+                category_id: true,
+                user_id: true,
+                customer_id: true,
+                
+                created_at: true
+            }
+        })
+
+        return res.json(response);
+    }
 }
 
 export {TaskController}

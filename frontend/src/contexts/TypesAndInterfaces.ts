@@ -36,10 +36,10 @@ export interface SetTaskProps {
 export interface ModalTaskProps{
     isOpen: boolean;
     user: UserType;
-    task: TaskType;
     users: UserType[];
     comments: CommentTypes[];
     customer: CustomerType;
+    usersNotResponsable: UserType[];
     onRequestUpdateTask: () => void;
     onRequestClose: () => void;
     onRequestFinishUnfinish: (task) => Promise<void>;

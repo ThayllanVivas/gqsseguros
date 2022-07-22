@@ -15,10 +15,6 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     // -- USESTATE section -- //
     const [tasks, set_Tasks] = useState<TaskType[]>(tasksFSSP) //KEEP IT ON THIS COMPONENT
     const [customers, set_Customers] = useState(customersFSSP) //KEEP IT ON THIS COMPONENT
-
-    const {setSearchInfo} = useContext(AuthContext)
-    const {tasksFiltered} = useContext(AuthContext)
-
     const [tasks2, set_Tasks2] = useState<TaskType[]>(tasks) //KEEP IT ON THIS COMPONENT
     const [tasksDates, set_TaskDates] = useState<string[]>([])
     const [tasksStatusTrueQuantity, set_TasksStatusTrueQuantity] = useState<number>() //KEEP IT ON THIS COMPONENT
@@ -27,13 +23,21 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     const [modalView, set_ModalView] = useState(false) //KEEP IT ON THIS COMPONENT
     const [user, set_user] = useState<UserType>()
     const [users, set_users] = useState<UserType[]>()
-    const [modalTask, set_ModalTask] = useState<TaskType>() //KEEP IT ON THIS COMPONENT
+
     const [modalTaskID, set_ModalTaskID] = useState<string>('') // KEEP IT ON THIS COMPONENT
     const [modalComments, set_ModalComments] = useState<CommentTypes[]>([]) //KEEP IT ON THIS COMPONENT
     const [modalCustomer, set_ModalCustomer] = useState<CustomerType>() //KEEP IT ON THIS COMPONENT
+    const [usersNotResponsable, set_UsersNotResponsable] = useState<UserType[]>()
     const [trueTasksActive, set_TrueTasksActive] =  useState<boolean>(false)
     const [falseTasksActive, set_FalseTasksActive] =  useState<boolean>(false)
     const [totalTasksActive, set_TotalTasksActive] =  useState<boolean>(true)
+
+    // -- USECONTEXT section -- //
+    const {setSearchInfo} = useContext(AuthContext)
+    const {tasksFiltered} = useContext(AuthContext)
+    const {modalTask, setModalTask} = useContext(AuthContext)
+
+    
 
     // to change tasks being show
     useEffect(() => {
@@ -65,8 +69,16 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     // it update modal task
     async function func_toUpdateModalTask(){
         const response  = await api.get("/task")
-        let taskFiltered = response.data.find(taskHMM => taskHMM.id === modalTaskID)
-        set_ModalTask(taskFiltered)
+        let taskFiltered = response.data.find((task) => task.id === modalTaskID)
+        setModalTask(taskFiltered)
+    }
+
+    async function func_toGetTheOnesNotResponsable(task: TaskType){
+        let notMe = users.filter((userX) => userX.id !== user.id)
+
+        let notResponsable = users.filter((userX) => userX.id !== task.user_id)
+        set_UsersNotResponsable(notResponsable)
+        // console.log('notResponsable', notResponsable)
     }
 
     // it changes all tasks who is being show to the filtered ones
@@ -192,7 +204,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         const customerFilteredForModal = customers.find(customer => customer?.id == taskFilteredForModal?.customer_id)
       
         set_ModalTaskID(taskID) //set ID of modal task
-        set_ModalTask(taskFilteredForModal) //set modal task
+        setModalTask(taskFilteredForModal) //set modal task
         set_ModalCustomer(customerFilteredForModal) //set modal customer
     }
 
@@ -288,8 +300,9 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     } 
 
     // it open modal
-    async function func_handleOpenModalView(taskID?: string){
-        await func_toUpdateModalData(taskID)
+    async function func_handleOpenModalView(task: TaskType){
+        await func_toUpdateModalData(task.id)
+        await func_toGetTheOnesNotResponsable(task)
         set_ModalView(!modalView)
     } 
     
@@ -337,7 +350,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                                                             return (
                                                                 <>
                                                                     <section key={index} className={STYLES.taskList}>
-                                                                        <button className={STYLES.taskItem} onClick={() => func_handleOpenModalView(task.id)} >
+                                                                        <button className={STYLES.taskItem} onClick={() => func_handleOpenModalView(task)} >
                                                                             {task.status ? (
                                                                                 <div className={STYLES.activeClass}></div> ): (
                                                                                 <div className={STYLES.notActiveClass}></div> 
@@ -367,11 +380,11 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                     {modalView && (
                         <ModalComponent
                             user={user}
-                            task={modalTask}
                             users={users}
                             isOpen={modalView}
                             comments={modalComments}
                             customer={modalCustomer}
+                            usersNotResponsable={usersNotResponsable}
                             onRequestClose={func_handleCloseModalView}
                             onRequestAddComent={func_handleAddComment}
                             onRequestUpdateTask={func_toUpdateModalTask}

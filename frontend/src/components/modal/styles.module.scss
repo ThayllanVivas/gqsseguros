@@ -35,15 +35,42 @@
 
             #responsableInfo{
                 width: 95%;
+                // background-color: orange;
+                border-top: 1px solid var(--white);
+                border-bottom: 1px solid var(--white);
                 margin-bottom: 0.5rem;
+                display: flex;
                 
                 h4 {
+                    min-width: 30%;
+                    height: 100%;
                     display: flex;
-                    justify-content: center;
+                    justify-content: left;
+                    align-items: center;
                     color: var(--white);
                     background-color: var(--dark-900);
-                    padding: 0.5rem;
+                    // background-color: pink;
                     border-radius: 0.4rem;
+                    border: 0;
+                }
+                select {
+                    width: 70%;
+                    align-items: center;
+                    color: var(--white);
+                    text-align: left;
+                    background-color: var(--dark-900);
+                    // background-color: pink;
+                    padding: 0.5rem;
+                    border: 0;
+                }
+
+                button {
+                    min-width: 25%;
+                    height: 100%;
+                    border: 0;
+                    font-weight: bold;
+                    color: var(--white);
+                    background-color: var(--main);
                 }
             }
 

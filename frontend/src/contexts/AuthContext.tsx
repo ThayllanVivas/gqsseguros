@@ -15,6 +15,8 @@ type AuthContextData = {
     setSearchInfo: (searchInfo: string) => void;
     tasksFiltered: TaskType[];
     setTasksFiltered: (tasks: TaskType[])  => void;
+    modalTask: TaskType;
+    setModalTask: (task: TaskType)  => void;
 }
 
 type SignInProps = {
@@ -63,9 +65,10 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({children}: AuthProviderProps) {
 
-    const [user, setUser] = useState<UserProps>()
-    const [searchInfo, setSearchInfo] = useState<string>('')
-    const [tasksFiltered, setTasksFiltered] = useState<TaskType[]>([])
+    const [user, setUser] = useState<UserProps>() //KEEP IT ON THIS COMPONENT
+    const [searchInfo, setSearchInfo] = useState<string>('') //KEEP IT ON THIS COMPONENT
+    const [tasksFiltered, setTasksFiltered] = useState<TaskType[]>([]) //KEEP IT ON THIS COMPONENT
+    const [modalTask, setModalTask] = useState<TaskType>() //KEEP IT ON THIS COMPONENT
     const isAuthenticated = !!user;
 
     //verify token of the user
@@ -134,7 +137,17 @@ export function AuthProvider({children}: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp, searchInfo, setSearchInfo, tasksFiltered, setTasksFiltered}}>
+        <AuthContext.Provider value={
+            {user, 
+            isAuthenticated, 
+            signIn, signOut, 
+            signUp, 
+            searchInfo, 
+            setSearchInfo, 
+            tasksFiltered, 
+            setTasksFiltered,
+            modalTask,
+            setModalTask}}>
             {children}
         </AuthContext.Provider>
     )

@@ -12,14 +12,13 @@ import { BranchesController } from './controllers/BranchesController';
 const router = Router(); //to copy what is inside Router() into router const
 
 // ROTA USER 
-
-router.post("/signup", new UserController().UserCreate); //create new user 
 router.post('/signin', new UserController().UserAuth) //make login
+router.post("/signup", new UserController().UserCreate); //create new user 
 router.get("/me", isAuthenticated, new UserController().Me); //access my profile
 router.get("/user", isAuthenticated, new UserController().User); //get all users
 router.get("/users", isAuthenticated, new UserController().Users); //get all users
-router.put('/user/status', isAuthenticated, new UserController().UserChangeStatus) //change user status
 router.put("/editup", isAuthenticated, new UserController().UserEdit); //edit a user profile
+router.put('/user/status', isAuthenticated, new UserController().UserChangeStatus) //change user status
 
 // ROTA CATEGORY
 router.post("/category", isAuthenticated, new CategoryController().CategoryCreate) //create category
@@ -29,6 +28,7 @@ router.get("/categories", isAuthenticated, new CategoryController().Categories) 
 router.get("/task", isAuthenticated, new TaskController().Task) //get a specific task
 router.get("/tasks", isAuthenticated, new TaskController().Tasks) //get all the task
 router.post("/task", isAuthenticated, new TaskController().TaskCreate) //create a new task
+router.put("/task/user", isAuthenticated, new TaskController().TaskChangeUser) //change user of a task
 router.put("/task/status", isAuthenticated, new TaskController().TaskChangeStatus) //change status of a task
 router.get("/task/category", isAuthenticated, new TaskController().TasksByCategory) //get all the task of a specific category
 
