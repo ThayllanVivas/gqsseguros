@@ -103,6 +103,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     async function func_toUpdateDashboard(){
         await func_toUpdateTasks()
         await func_toupdateCustomers()
+        await func_toUpdateTasksQuantity()
 
         setSearchInfo('')
         set_TotalTasksActive(true)

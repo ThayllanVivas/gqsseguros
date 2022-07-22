@@ -33,7 +33,7 @@ export function Body({customersFSSP}: NewCustomerProps) {
 
     async function func_updateButton(){
         await func_updateCustomers()
-        toast.success('Usuários atualizados')
+        toast.success('Clientes atualizados')
     }
 
     async function handleCreateCustomer(event){
