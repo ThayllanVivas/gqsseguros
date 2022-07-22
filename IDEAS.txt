@@ -18,7 +18,6 @@
 - [FEITO] Reverter a ordem que as tarefas são mostradas para o mais novo para o mais antigo
 - [FEITO] Adicionar para listar todos os usuários ativos exceto o admin@admin na tela de newUser
 - [FEITO] Adicionar campo para pesquisar tarefas a partir do header com o nome do cliente(escolhido) e/ou nome do carro
-
-- Trabalhar no design modal
+- [FEITO] Trabalhar no design modal
 
 - [PROBLEMAS EM FILTRAR QUEM É RESPONSÁVEL por conta do userState] Adicionar opção do admin ENVIAR TAREFA para outro usuário com todos os dados da mesma
