@@ -4,8 +4,9 @@ import { api } from '../../services/api'
 import { toast } from 'react-toastify'
 import { FiRefreshCcw } from "react-icons/fi"
 import { ModalComponent } from '../../components/modal'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CommentTypes, CustomerType, DashboardProps, TaskType, UserType } from '../../contexts/TypesAndInterfaces'
+import { AuthContext } from '../../contexts/AuthContext'
 
 
 // -- COMPONENT AREA -- //
@@ -14,6 +15,9 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     // -- USESTATE section -- //
     const [tasks, set_Tasks] = useState<TaskType[]>(tasksFSSP) //KEEP IT ON THIS COMPONENT
     const [customers, set_Customers] = useState(customersFSSP) //KEEP IT ON THIS COMPONENT
+
+    const {setSearchInfo} = useContext(AuthContext)
+    const {tasksFiltered} = useContext(AuthContext)
 
     const [tasks2, set_Tasks2] = useState<TaskType[]>(tasks) //KEEP IT ON THIS COMPONENT
     const [tasksDates, set_TaskDates] = useState<string[]>([])
@@ -31,19 +35,26 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     const [falseTasksActive, set_FalseTasksActive] =  useState<boolean>(false)
     const [totalTasksActive, set_TotalTasksActive] =  useState<boolean>(true)
 
+    // to change tasks being show
+    useEffect(() => {
+        func_toShowTotalTasks()
+      }, [tasksFiltered])
+
     // to change quantity of task's status and change tasks date
     useEffect(() => {
-        func_toUpdateTasksStatus()
-        func_handleGetDatesOfTasks()
+        func_toUpdateTasksQuantity()
+        func_toGetDatesOfTasks()
     }, [tasks2])
 
     //to get user info
     useEffect(() => {
-      handleGetUsersInfo()
+      func_toGetUsersInfo()
     }, [])
 
-    // -- FUNCTION section
-    async function handleGetUsersInfo(){
+    // ----------------- FUNCTION section -----------------
+
+    //it get info of users
+    async function func_toGetUsersInfo(){
         const response = await api.get('/me')
         set_user(response.data)
         
@@ -51,19 +62,31 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         set_users(responseUsers.data)
     }
 
-    async function updateTask(){
+    // it update modal task
+    async function func_toUpdateModalTask(){
         const response  = await api.get("/task")
         let taskFiltered = response.data.find(taskHMM => taskHMM.id === modalTaskID)
         set_ModalTask(taskFiltered)
     }
 
-    async function func_updateTasks(){
+    // it changes all tasks who is being show to the filtered ones
+    async function func_handleSetFilteredTasks(){
+        if(tasksFiltered.length>0){
+            set_Tasks2(tasksFiltered)
+        } else {
+            set_Tasks2(tasks)
+        }
+    }
+
+    // it get task state up to date
+    async function func_toUpdateTasks(){
         const response  = await api.get("/tasks")
         set_Tasks(response.data)
         set_Tasks2(response.data)
     }
 
-    async function func_updateComments(taskID: string){
+    // it update and get modal comments into modaComments state
+    async function func_toUpdateAndFilterModalComments(taskID: string){
         let commentsFilteredForModal = [] //to aux
         const response = await api.get("/comments")
 
@@ -72,43 +95,62 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                 commentsFilteredForModal.push(comment)
             }
         })
+        commentsFilteredForModal.reverse()
         set_ModalComments(commentsFilteredForModal) //set modal comments
     }
 
-    async function func_updateDashboard(){
+    // it update dashboard to base datas
+    async function func_toUpdateDashboard(){
+        await func_toUpdateTasks()
+        await func_toupdateCustomers()
+
+        setSearchInfo('')
         set_TotalTasksActive(true)
         set_TrueTasksActive(false)
         set_FalseTasksActive(false)
-        await func_updateTasks()
-        await func_updateCustomers()
+
         toast.success('Dashboard atualizado')
     }
 
-    async function func_updateCustomers(){
+    // it updates customers state variable
+    async function func_toupdateCustomers(){
         const response = await api.get("/customers")
         set_Customers(response.data)
     }
 
-    async function func_toUpdateTasksStatus(){
+    // it counts quantity of each status tasks
+    async function func_toUpdateTasksQuantity(){
         const response  = await api.get("/tasks")
 
         let statusTRUE = 0
         let statusFALSE = 0
 
-        response.data.map((task: TaskType)=> {
-            if(task.status) {
-                statusTRUE += 1
-            }
-            else {
-                statusFALSE += 1
-            }
-        })
+        if(tasksFiltered.length > 0){
+            tasksFiltered.map((task: TaskType)=> {
+                if(task.status) {
+                    statusTRUE += 1
+                }
+                else {
+                    statusFALSE += 1
+                }
+            })
+        } else {
+            response.data.map((task: TaskType)=> {
+                if(task.status) {
+                    statusTRUE += 1
+                }
+                else {
+                    statusFALSE += 1
+                }
+            })
+        }
         
         set_TasksStatusTrueQuantity(statusTRUE)
         set_TasksStatusFalseQuantity(statusFALSE)
     }
 
-    async function func_handleGetDatesOfTasks(){
+    // it works with tasks dates 
+    async function func_toGetDatesOfTasks(){
         let dates = [] //var aux
 
         //transformando a data em object e inserindo dentro da variavel DATES
@@ -141,8 +183,9 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         set_TaskDates(filteredArray)
     }
 
-    async function func_updateModalData(taskID: string){
-        await func_updateComments(taskID) // to update the user comments
+    // main function to update modal data
+    async function func_toUpdateModalData(taskID: string){
+        await func_toUpdateAndFilterModalComments(taskID) // to update the user comments
 
         const taskFilteredForModal = tasks.find((task: any) => task.id === taskID)
         const customerFilteredForModal = customers.find(customer => customer?.id == taskFilteredForModal?.customer_id)
@@ -152,6 +195,43 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
         set_ModalCustomer(customerFilteredForModal) //set modal customer
     }
 
+    // it updates home dashboard page with tasks available
+    async function func_toShowTotalTasks(){
+        set_TotalTasksActive(true)
+        set_TrueTasksActive(false)
+        set_FalseTasksActive(false)
+        await func_handleSetFilteredTasks()
+    }
+
+    // it filter tasks according to status of the tasks and tasks avaible at the moment
+    async function func_handleFilterTasks(status: boolean){
+        await func_toUpdateTasks()
+
+        if(status){
+            set_TrueTasksActive(true)
+            set_FalseTasksActive(false)
+            set_TotalTasksActive(false)
+        } else {
+            set_FalseTasksActive(true)
+            set_TrueTasksActive(false)
+            set_TotalTasksActive(false)
+        }
+
+        let data = new Array// to aux
+        if(tasksFiltered.length > 0){
+            console.log('entrou')
+            // set_Tasks2(tasksFiltered)
+            data.push(tasksFiltered.filter((task) => task.status === status))
+        } else {
+            // set_Tasks2(tasks)
+            data.push(tasks.filter((task) => task.status === status))
+        }
+        
+        set_Tasks2(data[0])
+        await func_toGetDatesOfTasks()
+    }
+
+    // it add a comment into comment database
     async function func_handleAddComment(comment: string){
         //verify is the user really types anything
         if(comment.length == 0){
@@ -167,30 +247,11 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
     
         toast.success("Comentário adicionado com sucesso") //show a sucess message to user
 
-        await func_updateModalData(modalTaskID) //call function to update modal data
+        await func_toUpdateModalData(modalTaskID) //call function to update modal data
         
     }
 
-    async function func_handleFilterTasks(status: boolean){
-        await func_updateTasks()
-
-        if(status){
-            set_TrueTasksActive(true)
-            set_FalseTasksActive(false)
-            set_TotalTasksActive(false)
-        } else {
-            set_FalseTasksActive(true)
-            set_TrueTasksActive(false)
-            set_TotalTasksActive(false)
-        }
-        await func_updateTasks()
-        let data = new Array
-        data.push(tasks.filter((task) => task.status === status))
-
-        set_Tasks2(data[0])
-        await func_handleGetDatesOfTasks()
-    }
-
+    // it delete a comment into comment database
     async function func_handleDeleteComment(comment_id: string){    
         await api.delete("/comment", {
             data: {
@@ -200,9 +261,10 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
 
         toast.success("Comentário removido com sucesso")
 
-        await func_updateModalData(modalTaskID) //call function to update modal data
+        await func_toUpdateModalData(modalTaskID) //call function to update modal data
     }
 
+    // it finish or unfinish a specific task from Modal
     async function func_handleFinishUnfinishTask(task: TaskType){
         const response = await api.put("/task/status", {
             id: task.id,
@@ -216,15 +278,17 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
             toast.warning('Status de conclusão desfeito!')
         }
         
-        await func_updateTasks()
+        await func_toUpdateTasks()
     }
 
+    // it close modal 
     async function func_handleCloseModalView(){
         set_ModalView(!modalView)
     } 
 
+    // it open modal
     async function func_handleOpenModalView(taskID?: string){
-        await func_updateModalData(taskID)
+        await func_toUpdateModalData(taskID)
         set_ModalView(!modalView)
     } 
     
@@ -236,7 +300,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
 
                         <article id={STYLES.taskSection}>
                                 <section id={STYLES.tasksStatusSection}>
-                                    <button id={totalTasksActive ? STYLES.statusTOTAL: STYLES.statusOFF} onClick={async () => await func_updateDashboard()}>
+                                    <button id={totalTasksActive ? STYLES.statusTOTAL: STYLES.statusOFF} onClick={async () => await func_toShowTotalTasks()}>
                                         <p> Tarefas no total: {tasksStatusTrueQuantity + tasksStatusFalseQuantity} </p>
                                     </button>
                                     <button id={trueTasksActive ? STYLES.statusTRUE: STYLES.statusOFF} onClick={async () => await func_handleFilterTasks(true)}>
@@ -245,7 +309,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                                     <button id={falseTasksActive ? STYLES.statusFALSE: STYLES.statusOFF} onClick={async () => await func_handleFilterTasks(false)}>
                                         <p> Tarefas aguardando conclusão: {tasksStatusFalseQuantity} </p>
                                     </button>
-                                    <button id={STYLES.refreshButton} onClick={() => func_updateDashboard()}>
+                                    <button id={STYLES.refreshButton} onClick={() => func_toUpdateDashboard()}>
                                         <FiRefreshCcw />
                                     </button>
                                 </section>
@@ -309,7 +373,7 @@ export function Body({tasksFSSP, customersFSSP, categoriesFSSP}: DashboardProps)
                             customer={modalCustomer}
                             onRequestClose={func_handleCloseModalView}
                             onRequestAddComent={func_handleAddComment}
-                            onRequestUpdateTask={updateTask}
+                            onRequestUpdateTask={func_toUpdateModalTask}
                             onRequestFinishUnfinish={func_handleFinishUnfinishTask}
                             onRequestDeleteComment={func_handleDeleteComment}
                         />

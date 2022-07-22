@@ -3,6 +3,7 @@ import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import { createContext, ReactNode, useEffect, useState} from 'react'
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
+import { TaskType } from './TypesAndInterfaces';
 
 type AuthContextData = {
     user: UserProps;
@@ -10,6 +11,10 @@ type AuthContextData = {
     signIn: (credentials: SignInProps) => Promise<void>;
     signOut: () => void;
     signUp: (credentials: SignUpProps) => Promise<void>;
+    searchInfo: string;
+    setSearchInfo: (searchInfo: string) => void;
+    tasksFiltered: TaskType[];
+    setTasksFiltered: (tasks: TaskType[])  => void;
 }
 
 type SignInProps = {
@@ -59,6 +64,8 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider({children}: AuthProviderProps) {
 
     const [user, setUser] = useState<UserProps>()
+    const [searchInfo, setSearchInfo] = useState<string>('')
+    const [tasksFiltered, setTasksFiltered] = useState<TaskType[]>([])
     const isAuthenticated = !!user;
 
     //verify token of the user
@@ -127,7 +134,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp}}>
+        <AuthContext.Provider value={{user, isAuthenticated, signIn, signOut, signUp, searchInfo, setSearchInfo, tasksFiltered, setTasksFiltered}}>
             {children}
         </AuthContext.Provider>
     )

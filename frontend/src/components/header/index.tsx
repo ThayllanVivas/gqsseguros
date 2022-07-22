@@ -2,8 +2,9 @@ import Link from 'next/link'
 import STYLES from './header.module.scss'
 import { api } from '../../services/api'
 import { FiLogOut} from 'react-icons/fi'
-import { signOut } from '../../contexts/AuthContext'
-import { useEffect, useState } from 'react'
+import { AuthContext, signOut } from '../../contexts/AuthContext'
+import { useContext, useEffect, useState } from 'react'
+import { Console } from 'console'
 
 type UserInfoType = {
     id: string,
@@ -16,7 +17,7 @@ export function Header({activePage}){
 
     const [userInfo, setUserInfo] = useState<UserInfoType>()
 
-    const [taskNameSearch, setTaskNameSearch] = useState('')
+    const {searchInfo, setSearchInfo} = useContext(AuthContext)
 
     // to get USER info
     useEffect(() => {
@@ -35,30 +36,33 @@ export function Header({activePage}){
                 <Link href="/dashboard">
                     <img id={STYLES.logo} src="./logo.png" width={40} height={46}/>
                 </Link>
-                {/* <input 
+                <input 
                     type="text"
                     placeholder="Pesquisar tarefa..."
                     id={STYLES.logoInput}
-                    value={taskNameSearch}
-                    onChange={(e) => setTaskNameSearch(e.target.value)}
-                /> */}
+                    value={searchInfo}
+                    onChange={(e) => {
+                        setSearchInfo(e.target.value)
+                    }}
+                />
             </div>
+
             <nav id={STYLES.menuNav}>
                 <Link href="/dashboard">
                     <a className={activePage === 'dashboardPage' ? STYLES.dashboardPageActive : undefined}>Início</a>
-                </Link>
-
-                <Link href="/newcustomer">
-                    <a className={activePage === 'customerPage' ? STYLES.customerPageActive : undefined}>Novo cliente</a>
                 </Link>
 
                 <Link href="/newtask">
                     <a className={activePage === 'newTaskPage' ? STYLES.taskPageActive : undefined}>Nova tarefa</a>
                 </Link>
 
+                <Link href="/newcustomer">
+                    <a className={activePage === 'customerPage' ? STYLES.customerPageActive : undefined}>Clientes</a>
+                </Link>
+
                 {userInfo?.admin_mode && (
                     <Link href="/newuser">
-                        <a className={activePage === 'newUserPage' ? STYLES.newUserPageActive : undefined}>Novo usuário</a>
+                        <a className={activePage === 'newUserPage' ? STYLES.newUserPageActive : undefined}>Usuários</a>
                     </Link>
                 )}     
 
