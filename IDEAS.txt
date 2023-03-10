@@ -1,0 +1,23 @@
+- [FEITO] Quando usúario concluir tarefa, mostrar opção de se foi com sucesso ou não
+	[não adicionado]-> Adicionar campos para que inclua seguradora escolhida, valor do seguro e outros dados importantes
+- [FEITO] Quando usuário escolher uma modalidade diferente (seguro novo, recuperação, endosso, etc) mudar o nome do botão CRIAR para ser
+    compativel com a modalidade escolhida
+- [FEITO] Enquanto usuário não preencher todos os campos necessários, fazer com que o botão CRIAR fique em verde apagado (disabled)
+- [FEITO] IMPORTANTE separar atividades finalizadas por dia de CRIADAS tanto para o usuário responsável como para o admin
+- [FEITO] Alterar código para que os comentários da tarefa sejam retornados e não os comentários do usuário
+- [FEITO] [DESFEITO por não haver necessidade] Adicionar rodapé com informações de quem é o usuário, qual perfil é o dele, etc
+- [FEITO] LISTAR USUÁRIOS e seus status na aba NOVO USUÁRIO
+- [FEITO] Adicionar opção de CANCELAR ACESSO de um usuário ao sistema
+- [FEITO] Remover opção de ADICIONAR COMENTÁRIOS e finalizar/restaurar uma atividade em caso do user ser ADMIN
+- [FEITO] Opção de que ao clicar em TAREFAS CONCLUÍDAS ou TAREFAS AGUARDANDO CONCLUSÃO e filtrar pelas mesmas somente
+- [FEITO] Listar clientes na aba de NOVO CLIENTE
+- [FEITO] Adicionar NOME DO RESPONSÁVEL pela atividade em caso do user ser ADMIN
+- [FEITO] Adicionar opção para novo usuário ser ADMIN ou USER no cadastro de novo usuário
+- [FEITO] Adicionar opção de editar NOME, EMAIL, SENHA E TIPO do usuário em newUser
+    -> codigo para converter senha em hash
+- [FEITO] Reverter a ordem que as tarefas são mostradas para o mais novo para o mais antigo
+- [FEITO] Adicionar para listar todos os usuários ativos exceto o admin@admin na tela de newUser
+- [FEITO] Adicionar campo para pesquisar tarefas a partir do header com o nome do cliente(escolhido) e/ou nome do carro
+- [FEITO] Trabalhar no design modal
+
+- [PROBLEMAS EM FILTRAR QUEM É RESPONSÁVEL por conta do userState] Adicionar opção do admin ENVIAR TAREFA para outro usuário com todos os dados da mesma

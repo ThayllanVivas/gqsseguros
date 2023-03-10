@@ -1,0 +1,148 @@
+#container {
+    max-width: 1440px;
+    padding: 0 2rem;
+    margin: 1rem auto 4rem auto;
+    background-color: var();
+
+    article#taskSection {
+
+        .dateText {
+            display: flex;
+            justify-content: left;
+            color: var(--white);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        #tasksStatusSection {
+            color: #FFF;
+            display: flex;
+
+            #statusTRUE, #statusFALSE, #statusTOTAL, #statusOFF {
+                min-width: 31%;
+                margin-right: 1%;
+                height: 2rem;
+                display: flex;
+                border-radius: 0.4rem;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--dark-700);
+                border: 0;
+            }
+
+            #statusTRUE {
+                background-color: var(--green-900);
+                color: var(--dark-900);
+                font-weight: bold;
+            }
+
+            #statusFALSE {
+                background-color: var(--orange-900);
+                color: var(--dark-700);
+                font-weight: bold;
+            }
+            #statusTOTAL {
+                background-color: var(--white);
+                color: var(--black);
+                font-weight: bold;
+            }
+
+            #statusOFF {
+                background-color: var(--dark-700);
+                color: var(--white);
+                font-weight: bold;
+                border: 1px solid var(--gray-100)
+            }
+
+            #refreshButton {
+                background: transparent;
+                border: 0;
+                margin-left: 0.5rem;
+                color: var(--green-900);
+                font-size: 22px;
+                padding-top: 0.3rem;
+            }
+        }
+
+        // container of tasks divide by day
+        .taskContainer {
+            padding: 1rem;
+            
+            .taskInfoContainer {
+                max-width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                padding: 0.6rem;
+                border-bottom: 3px solid var(--dark-700);
+            }
+
+            section.taskList {
+                min-width: 49%;
+                display: flex;            
+                align-items: center;
+                border-radius: 0.3rem;
+                margin: 1rem 0;
+                flex-direction: column;
+                
+                .branch_name {
+                    font-size: 12px;
+                }
+    
+                .taskItem {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    border: 1px solid var(--gray-100);
+
+                    color: var(--white);
+                    height: 60px;
+                    border: 0;
+                    font-size: 1.2rem;
+                    background: transparent;
+                    font-weight: bold;
+    
+                    .activeClass, .notActiveClass {
+                        width: 9px;
+                        height: 60px;
+                        margin-right: 1rem;
+                        border-radius: 0.3rem 0 0 0.3rem;                    
+                    }
+    
+                    .activeClass{
+                        background-color: var(--green-900);
+                    }
+    
+                    .notActiveClass {
+                        background-color: var(--orange-900);
+                    }
+    
+                    .taskItemDetails {
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        width: 100%;
+                        height: 100%;
+                        background-color: var(--dark-700);
+                        border-radius: 0.5rem;
+                        border: 1px solid var(--gray-100);
+    
+                        .vehicleName, .customerName {
+                            min-width: 49%; 
+                        }
+    
+                        .slash {
+                            height: 30%;
+                            width: 0.5%;
+                            border-radius: 0.8rem;
+                            background-color: white;
+                        }
+                    }           
+                }
+            }
+        }        
+    }
+}
+

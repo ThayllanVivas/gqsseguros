@@ -1,0 +1,125 @@
+#headerContainer {
+    height: 5rem;
+    background-color: var(--dark-700);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    // border-bottom: 1px solid var(--gray-100);
+
+    #logoNav {
+        margin-left: 5rem;
+        min-width: 30%;
+        // background-color: brown;
+        display: flex;
+        align-items: center;
+        img#logo{
+            cursor: pointer;
+            margin-right: 3rem;
+
+            &:hover {
+                transform: scale(1.2)
+            }
+        }
+
+        input#logoInput {
+            background-color: var(--dark-900);
+            text-align: center;
+            height: 30px;
+            border-radius: 0.3rem;  
+            color: var(--white);
+            border: 1px solid var(--gray-100);
+            font-weight: bold;
+        
+            &::placeholder {
+                color: var(--gray-100);
+                opacity: 0.5;
+                font-weight: bold;
+            }
+        }
+    }   
+
+    #menuNav {
+        margin-right: 5rem;
+        min-width: 65%;
+        // background-color: rgb(30, 221, 132);
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        font-weight: bold;
+    
+        a {
+            color: var(--white);
+            padding: 0 0.5rem;
+            display: inline-block;
+            position: relative;
+            transition: color 0.4s;
+            padding: 0.4rem  0.6rem;
+            border-radius: 0.3rem;
+            border: 1px solid var(--gray-100);
+            background-color: var(--dark-900);
+            margin-right: 2rem;
+    
+            &:hover {
+                color: var(--dark-900);
+                background-color: var(--main);
+                border: 1px solid var(--main);
+            }  
+        }
+
+        .customerPageActive {
+            color: var(--dark-900);
+            background-color: var(--green-900);
+            border: 1px solid var(--green-900);
+        }
+        
+        .taskPageActive {
+            color: var(--dark-900);
+            background-color: var(--green-900);
+            border: 1px solid var(--green-900);
+        }
+    
+        .newUserPageActive {
+            color: var(--dark-900);
+            background-color: var(--green-900);
+            border: 1px solid var(--green-900);
+        }
+        .dashboardPageActive {
+            color: var(--dark-900);
+            background-color: var(--green-900);
+            border: 1px solid var(--green-900);
+        }
+    
+        button {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            margin-left: 1rem;
+            background: transparent;
+            border: 0;
+            transition: transform 0.5s;
+    
+            svg {
+                color: var(--red-900);
+            }
+    
+            svg:hover {
+                color: var(--red-900)
+            }
+    
+            &:hover {
+                transform: scale(1.2)
+            }
+
+            p {
+                font-size: 1rem;
+                color: var(--red-900);
+            }
+        }
+        
+        
+    }
+}
+
+
+

@@ -1,0 +1,324 @@
+#newUserContainer {
+    display: flex;
+    flex-direction: row;
+    width: 1200px;
+    height: calc(100vh - 100px);
+    display: flex;
+    margin: 0.8rem auto 0;
+    // background-color: orange;
+
+    // SIGNUP SECTION
+    #signUpContainer {
+        width: 47%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    
+        h1 {
+            display: flex;
+            color: var(--white);
+            padding-bottom: 1rem;
+            margin-top: 2rem;
+        }
+    
+        form {
+            width: 100%;  
+            display: flex;
+            flex-direction: column;
+            margin-right: 1rem;            
+
+            #buttonAdd {
+                width: 60%;
+                height: 40px;
+                border: 0;
+                background-color: var(--green-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700)
+            }  
+
+            #buttonAddDISABLED{
+                width: 60%;
+                height: 40px;
+                border: 0;
+                background-color: var(--green-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                opacity:  0.5;
+            }
+
+            #buttonClean {
+                width: 39%;
+                height: 40px;
+                border: 0;
+                background-color: var(--red-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                margin-left: 1%;
+            }
+
+            #buttonCleanDISABLED {
+                width: 39%;
+                height: 40px;
+                border: 0;
+                background-color: var(--red-900);
+                font-weight: bold;
+                font-size: 1.2rem;
+                border-radius: 0.3rem;
+                color: var(--dark-700);
+                margin-left: 1%;
+                opacity:  0.5;
+            } 
+
+            div {
+                width: 100%;
+                display: flex;
+                justify-content: left;
+
+                #passwordInput{
+                    width: 60%;
+                    margin-right: 1%;
+                }   
+                
+                #choosedUser{
+                    color: var(--white);
+                    background-color: orange;
+                    border:0px;
+                    height: 40px;
+                    width: 39%;
+                    border-radius: 0.4rem;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                #choosedAdmin{
+                    color: var(--white);
+                    background-color: blue;
+                    border: 0px;
+                    height: 40px;
+                    width: 39%;
+                    border-radius: 0.4rem;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                option {
+                    background-color: var(--white);
+                    color: var(--black);
+                }
+            }
+        }    
+    }
+
+    //DIVISORY IN THE MIDDLE OF CONTAINERS
+    #divisory {
+        width: 0.2%;
+        background-color: var(--dark-700);
+        margin: 0 1rem;
+        // background-color: antiquewhite;
+    }
+
+    #registerContainer {
+        width: 53%;
+
+        // USERS LIST SECTION
+        #userContainer {
+            // width: 53%;
+            overflow-x: none;
+            display: flex;
+            align-items: center;
+            // justify-content: center;
+            flex-direction: column;
+            color: var(--white);
+            // margin-left: 1rem;
+            overflow-x: auto;
+
+            #userContainerHeader{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                width: 100%;
+
+                h1 {
+                    display: flex;
+                    justify-content: right;
+                    width: 80%;
+                    // background-color: antiquewhite;
+                }
+
+                #refreshButton {
+                    background: transparent;
+                    width: 20%;
+                    border: 0;
+                    // background-color: aquamarine;
+                    // margin-left: 0.5rem;
+                    color: var(--green-900);
+                    font-size: 22px;
+                    padding-top: 0.3rem;
+                }
+            }
+
+            
+            
+            ul#userList {
+                padding: 1rem 0;
+                width: 100%;
+                display: inherit;
+                flex-direction: inherit;
+                align-items: center;
+
+                
+                li {
+                    width: inherit;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    margin-bottom: 1rem;
+
+                    list-style-type: circle;
+                    padding: 0.4rem 0.3rem;
+                    border-radius: 0.4rem;
+                    background-color: var(--dark-700);
+
+                    // flex-wrap: wrap;
+
+                    .userStatusOn {
+                        background-color: orange;
+                        color: var(--white);
+                    }
+                    .userStatusOff {
+                        background-color: var(--red-900);
+                        color: var(--white);
+                    }
+
+                    .userStatusOn, .userStatusOff {
+                        border: 0px;
+                        font-weight: bold;
+                    }
+
+                    .name, .email, .userStatusOn, .userStatusOff {
+                        width: 31%;
+                        margin: 0 1%;
+                        padding: 0.5rem 1rem;
+                        border-radius: 0.3rem;
+                    }
+
+                    .editUserButton {
+                        color: var(--red-900);
+                        background: transparent;
+                    }                
+                }
+            }
+        }
+
+        // USERS LIST SECTION
+        #adminContainer {
+            // width: 53%;
+            overflow-x: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            color: var(--white);
+            // margin-left: 1rem;
+            overflow-x: auto;
+
+            #adminContainerHeader{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                width: 100%;
+
+                h1 {
+                    display: flex;
+                    justify-content: right;
+                    width: 80%;
+                    // background-color: antiquewhite;
+                }
+
+                #refreshButton {
+                    background: transparent;
+                    width: 20%;
+                    border: 0;
+                    // background-color: aquamarine;
+                    // margin-left: 0.5rem;
+                    color: var(--green-900);
+                    font-size: 22px;
+                    padding-top: 0.3rem;
+                }
+            }
+  
+            
+            ul#adminList {
+                padding: 1rem 0;
+                width: 100%;
+                display: inherit;
+                flex-direction: inherit;
+                align-items: center;
+
+                
+                li {
+                    width: inherit;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                    margin-bottom: 1rem;
+
+                    list-style-type: circle;
+                    padding: 0.4rem 0.3rem;
+                    border-radius: 0.4rem;
+                    background-color: var(--dark-700);
+                    // flex-wrap: wrap;
+
+                    .adminStatusOn, .adminStatusOff {
+                        border: 0px;
+                        font-weight: bold;
+                    }
+
+                    .name, .email, .adminStatusOn, .adminStatusOff {
+                        width: 31%;
+                        margin: 0 1%;
+                        padding: 0.5rem 1rem;
+                        border-radius: 0.3rem;
+                    }
+
+                    .adminStatusOn {
+                        background-color: blue;
+                        color: var(--white);
+                    }
+                    .adminStatusOff {
+                        background-color: var(--red-900);
+                        color: var(--white);
+                    }
+
+                    .editAdminButton {
+                        color: var(--red-900);
+                        background: transparent;
+                    }                
+                }
+            }
+        }
+    }
+ 
+}
+
+.input {
+    margin-bottom: 1rem;
+    height: 40px;
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: var(--dark-900);
+    color: var(--white);
+    padding: 1rem;
+    border: 1px solid var(--gray-100);
+
+    &::placeholder {
+        color: var(--red-900);
+    }
+}

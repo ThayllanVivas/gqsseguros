@@ -1,0 +1,76 @@
+.TheFather {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 1300px;
+    display: flex;
+    margin: 0 auto;
+    // justify-content: space-between;
+
+    .containerCenter {
+        min-width: 50%;
+        max-width: 50%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: var(--gray-900);
+
+        #LogoTranstion {
+            height: 100vh;
+            width: 100%;
+            background-image: url('./logo.png');
+            background-position: center;
+            background-size: 500px;
+            animation-name: changingSizeLogo;
+            animation-duration: 5s;
+            animation-iteration-count: 100;
+            animation-direction: alternate-reverse;
+        }
+    }
+}
+
+@keyframes changingSizeLogo {
+    from {
+        background-size: 10px;
+    }
+    to {
+        background-size: 680px;
+    }
+}
+
+
+.login {
+    margin-top: 2rem;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+
+    h1 {
+        display: flex;
+        color: var(--white);
+        padding-bottom: 1rem;
+    }
+
+    form {
+      width: 90%;  
+      display: flex;
+      flex-direction: column;
+    }
+}
+
+.text {
+    margin-top: 1rem;
+    color: var(--white);
+    cursor: pointer;
+}
+
+@media (max-width: 620px) {
+    .login {
+        width: 90%;
+    }
+}
